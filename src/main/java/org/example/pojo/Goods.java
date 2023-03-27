@@ -26,12 +26,19 @@ public class Goods extends BaseEntity implements Serializable {
     GoodsType goodsType;
 
     @Column(name = "manufacturer")
-    String manufacturer;
+    String manufacturer;    // 生产商
 
     @Column(name = "lifespan")
-    Integer lifespan;
+    Integer lifespan;       // 商品有效期
 
     @Column(name = "mDescribe")
-    String mDescribe;
+    String mDescribe;   //描述
 
+    @Transient
+    public String getGoodType(){
+        if (goodsType!=null)
+            return goodsType.getSname();
+        else
+            return "";
+    }
 }

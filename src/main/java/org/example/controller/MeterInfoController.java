@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
     仪表参数设置及相关管理
     @Author szy
     @Date  2022-6-28
