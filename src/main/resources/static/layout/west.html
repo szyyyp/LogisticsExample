@@ -1,0 +1,181 @@
+<style>
+    .tree-node {
+        margin-bottom: 8px;
+    }
+
+    .tree-title {
+        padding-left: 8px;
+        font-size: 14px;
+        font-family: 微软雅黑;
+    }
+</style>
+
+<script type="text/javascript">
+    var tt;
+    var treeData = [{
+        "id": 1,
+        "text": "系统设置",
+        "iconCls": "icon-setting",
+        "children": [{
+            "text": "称台参数",
+            "checked": true,
+            "iconCls": "anchor",
+            "attributes": {
+                "url": "/scaleInfo.html",
+            },
+        }, {
+            "text": "仪表参数",
+            "checked": false,
+            "iconCls": "asterisk_orange",
+            "attributes": {
+                "url": "/meterInfo.html",
+            },
+        },  {
+            "text": "学生信息",
+            "checked": false,
+            "iconCls": "asterisk_orange",
+            "attributes": {
+                "url": "/student.html",
+            },
+        },
+          {
+            "text": "课程信息",
+            "checked": false,
+            "iconCls": "xhtml_go",
+            "attributes": {
+                 "url": "/course.html",
+            },
+        },
+        {
+            "text": "数据监视",
+            "state": "open",
+            "iconCls": "icon_moinitor",
+            "children": [{
+                "text": "实时重量",
+                "checked": true,
+                "iconCls": "table_refresh",
+                "attributes": {
+                    "url": "/realWeight.html",
+                },
+            }, {
+                // "id": 8,
+                "text": "实时状态",
+                "state": "open",
+                "iconCls": "table_refresh",
+                "attributes": {
+                    "url": "/realState.html",
+                }
+            }, {
+                // "id": 8,
+                "text": "PLC数据",
+                "state": "open",
+                "iconCls": "table_refresh",
+                "attributes": {
+                    "url": "/plcData.html",
+                }
+            }, {
+                "text": "重量采集记录",
+                "state": "open",
+                "iconCls": "table_refresh",
+                "attributes":{
+                    "url": "/WeightCollectRec.html",
+                }
+            }, {
+                "text": "重量发送日志",
+                "state": "open",
+                "iconCls": "table_refresh",
+                "attributes": {
+                    "url": "/WeightSendRec.html"
+                }
+
+            }
+
+            ]
+        }]
+    }, {
+        "text": "WMS 接口",
+        "state": "open",
+        "iconCls": "anchor",
+        "children": [{
+            "text": "接口测试",
+            "state": "open",
+            "iconCls": "table_refresh",
+            "attributes": {
+                "url": "/testWmsInterface.html",
+            }
+        },{
+            "text": "WMS 接口访问日志",
+            "state": "open",
+            "iconCls": "table_refresh",
+            "attributes": {
+                "url": "/wmsVisitLog.html",
+            }
+        },
+        //     // 隐藏交互日志 --- 还未开发
+        //     {
+        //     "text": "交互日志"
+        // }
+        ]
+    }];
+
+    $(function () {
+        tt = $('#tt').tree({
+            data: treeData,
+            formatter: function (node) {
+                var s = node.text;
+                if (node.children) {
+                    s += ' <span style=\'color:blue\'>(' + node.children.length + ')</span>';
+                }
+                return s;
+            },
+            onClick: function (node) {
+                if (node.attributes && node.attributes.url) {
+                    var url;
+                    if (node.attributes.url.indexOf('/') == 0) {/*如果url第一位字符是"/"，那么代表打开的是本地的资源*/
+                        url = "http://" + host + node.attributes.url;
+
+                    } else {/*打开跨域资源*/
+                        url = node.attributes.url;
+                    }
+                    addTab({
+                        url: url,
+                        title: node.text,
+                        iconCls: node.iconCls
+                    });
+                }
+            }
+        });
+    });
+
+    function addTab(params) {
+        if (params.title.indexOf('图形监控') != -1) {
+            window.open(params.url, 'txjk', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no,channelmode=yes');
+            return;
+        }
+
+        var iframe = '<iframe src="' + params.url + '" frameborder="0" style="border:0;width:100%;height:100%;"></iframe>';
+        var t = $('#index_tabs');
+        var opts = {
+            title: params.title,
+            closable: true,
+            iconCls: params.iconCls,
+            content: iframe,
+            border: false,
+            fit: true
+        };
+        if (t.tabs('exists', opts.title)) {
+            t.tabs('select', opts.title);
+            parent.$.messager.progress('close');
+        } else {
+            t.tabs('add', opts);
+        }
+    }
+</script>
+
+<div className="easyui-accordion" data-options="fit:true,border:false">
+    <div className="well well-small">
+        <ul id="tt"></ul>
+
+    </div>
+
+</div>

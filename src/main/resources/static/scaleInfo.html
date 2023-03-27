@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>称台参数设置</title>
+</head>
+<link rel="stylesheet" type="text/css" href="easyUI/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="easyUI/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="easyUI/themes/myicon.css">
+<link rel="stylesheet" type="text/css" href="easyUI/themes/color.css">
+<link rel="stylesheet" type="text/css" href="myCSS/demo.css">
+
+<script type="text/javascript" src="easyUI/jquery.js"></script>
+<script type="text/javascript" src="easyUI/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="easyUI/locale/easyui-lang-zh_CN.js"></script>
+
+<script type="text/javascript" src="easyUI/extJquery.js"></script>
+<script type="text/javascript" src="easyUI/extEasyUI.js"></script>
+<script type="text/javascript" src="myJs/showMessage.js"></script>
+
+<style>
+    .datagrid-header-row .datagrid-cell span {
+        white-space: normal !important;
+        word-wrap: normal !important;
+    }
+</style>
+<script type="text/javascript">
+    let dataGrid;
+
+    $(function() {
+        $('#dataGrid').pagination({
+            total:2000,
+            pageSize:30
+        });
+
+        editrow = 'undefined'; //行编辑开关
+        dataGrid = $('#dataGrid')
+            .datagrid(
+                {
+                    url : httphost + '/scale/getScaleInfo',
+                    pagination : true,
+                    fitColumns : true,
+                    fit : true,
+                    rownumbers : true,// 显示行号
+                    singleSelect : true,// 只能单选
+                    border : false,
+                    striped : true,// 隔行变色
+                    idField : 'id', // 主键字段
+                    pageList : [ 30, 50, 100, 1000, 2000 ],
+                    frozenColumns : [ [ {
+                        field : 'id',
+                        title : 'ID',
+                        align : 'center',
+                        hidden: true,
+                        width : 50,
+                    }, {
+                        field : 'alias',
+                        title : '名称',
+                        width : 70,
+                        sortable : true,
+                        editor : {
+                            type : 'validatebox',
+                            options : {
+                                required : false
+                            }
+                        }
+                    } ] ],
+                    columns : [ [
+                        {
+                            field : 'scaleCode',
+                            title : '称代码',
+                            sortable : true,
+                            width : 60,
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : true,
+                                }
+                            }
+                        },
+                        {
+                            field : 'scaleType',
+                            title : '称类型',
+                            sortable : true,
+                            width : 60,
+                            formatter: function(value, row, index) {
+                                if (value == 0) return "普通称";
+                                if (value == 1) return "二级称";
+                            },
+                            editor : {
+                                type : 'combobox',
+                                options : {
+                                    required : true,
+                                    valueField : 'id',
+                                    textField : 'value',
+                                    data : [ {
+                                        id : '0',
+                                        value : '普通称'
+                                    }, {
+                                        id : '1',
+                                        value : '二级称'
+                                    } ]
+                                }
+                            }
+                        },{
+                            field : 'openSecondScale',
+                            title : '二级称开启条件( < ? )',
+                            width : 60,
+                        }, {
+                            field : 'minWorkWeight',
+                            title : '最小工作重量阈值',
+                            width : 120,
+                            editor : {
+                                type : 'numberbox',
+                                options : {
+                                    required : true
+                                }
+                            }
+                        },
+                        {
+                            field : 'location',
+                            title : '秤位置',
+                            width : 120,
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : true
+                                }
+                            }
+                        },{
+                            field : 'wmsPlatform',
+                            title : 'wms 称台号',
+                            width : 120,
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : true
+                                }
+                            }
+                        },{
+                            field : 'palletNo',
+                            title : '待回库托盘号',
+                            width : 120,
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : false
+                                }
+                            }
+                        },
+                        {
+                            field : 'actor',
+                            title : '操作',
+                            width : 170,
+                            formatter : function(value, row, index) {
+                                var str = '';
+                                str += $
+                                    .formatString(
+                                        '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
+                                        index,
+                                        'easyUI/themes/extjs_icons/pencil.png');
+                                //
+                                // // 注销删除按钮
+                                // str += '&nbsp;&nbsp;';
+                                // str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', index, 'easyUI/themes/extjs_icons/cancel.png');
+                                //
+                                if (row.scaleType == 1){
+                                    str += '&nbsp;&nbsp;';
+                                    str += $
+                                        .formatString(
+                                            '<img onclick="scaleUp(\'{0}\');" src="{1}" title="电钢顶升"/>',
+                                            row.id,
+                                            'easyUI/themes/icons/arrow_up.png');
+                                    str += '&nbsp;&nbsp;';
+                                    str += $
+                                        .formatString(
+                                            '<img onclick="scaleDown(\'{0}\');" src="{1}" title="电钢下降"/>',
+                                            row.id,
+                                            'easyUI/themes/icons/arrow_down.png');
+
+                                }
+                                return str;
+                            }
+                        } ] ],
+                    toolbar : '#toolbar',
+
+                    onLoadSuccess : function() {
+                        parent.$.messager.progress('close');
+
+                        $(this).datagrid('tooltip');
+                    },
+                    onAfterEdit : function(rowIndex, rowData, changes) {
+                        //console.info(rowData);
+                        afterEdit(rowIndex, rowData, changes);
+                    }
+                });
+    });
+
+    function afterEdit(rowIndex, rowData, changes) {
+        var inserted = dataGrid.datagrid('getChanges', 'inserted');
+        var updated = dataGrid.datagrid('getChanges', 'updated');
+        var url = "";
+        var data = {};
+        if (inserted.length > 0) {
+            url = "/scale/add";
+            data = inserted[0];
+        }
+        if (updated.length > 0) {
+            url = "/scale/edit";
+            data = updated[0];
+        }
+        if (url.length < 1)
+            return;
+        //console.info(url);
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : data,
+            dataType : 'json',
+            success : function(r) {
+                if (r && r.success) {
+                    parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
+                    dataGrid.datagrid('acceptChanges');
+                } else {
+                    parent.$.messager.alert('数据更新或插入', r.msg, 'error'); //easyui中的控件messager
+                    dataGrid.datagrid('rejectChanges');
+                }
+            }
+        });
+        editrow = 'undefined'; //开关复位
+    }
+
+    function deleteFun(id) {
+        //console.info(id);
+        if (id != undefined) {
+            dataGrid.datagrid('selectRow', id);
+        }
+        var rows = dataGrid.datagrid('getSelections');
+        //console.info(rows);
+        if (rows.length > 0) {
+            parent.$.messager.confirm('询问', '您是否要删除当前称？', function(b) {
+                if (b) {
+                    parent.$.messager.progress({
+                        title : '提示',
+                        text : '数据处理中，请稍后....'
+                    });
+                    $.post('/scale/del', {
+                        id : rows[0].id
+                    }, function(result) {
+                        if (result.success) {
+                            parent.$.messager.alert('提示', result.msg, 'info');
+                            dataGrid.datagrid('reload');
+                        } else
+                            parent.$.messager.alert('提示', result.msg, 'error');
+                        parent.$.messager.progress('close');
+                    }, 'JSON');
+                }
+            });
+        }
+    }
+
+    function editFun(index) {
+        if (editrow != 'undefined') {
+            dataGrid.datagrid('endEdit', editrow);
+        }
+        dataGrid.datagrid('removeEditor', [ 'id' ]);
+        let editRow = dataGrid.datagrid('getData').rows[index];
+        // console.info(editRow);
+
+        if (editRow.scaletype == 0)
+            dataGrid.datagrid('removeEditor', [ 'openSecondScale' ]);
+        else
+            dataGrid.datagrid('addEditor', {
+                field : 'openSecondScale',
+                editor : {
+                    type : 'numberbox',
+                    options : {
+                        required : true
+                    }
+                }
+            });
+        dataGrid.datagrid('beginEdit', index);
+        editrow = index;
+    }
+
+    function addFun() {
+        if (editrow != 'undefined') {
+            dataGrid.datagrid('endEdit', editrow);
+        }
+        if (editrow == 'undefined') {
+            /*            dataGrid.datagrid('addEditor', {
+                            field : 'id',
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : true
+                                }
+                            }
+                        });*/
+            dataGrid.datagrid('insertRow', {
+                index : 0,
+                row : {}
+            });
+            dataGrid.datagrid('beginEdit', 0);
+            editrow = 0;
+        }
+    }
+
+    function saveFun() {
+        //console.info(editrow);
+        dataGrid.datagrid('endEdit', editrow); //editrow 为本页面的局部变量
+    }
+
+    function cancelFun() {
+        editrow = 'undefined'; //开关复位
+        dataGrid.datagrid('rejectChanges');
+        dataGrid.datagrid('unselectAll');
+    }
+
+    $.extend($.fn.validatebox.defaults.rules, {
+        myvalid: {
+            validator: function (value, param) {
+                //return /^[A-F\d]{5}$/.test(value)//其他长度注意改正则,只能输入A-F或数字且长度为5！
+                return /^[\d]{2,4}$/.test(value)   //验证1-999之间的所有正整数
+            },
+            message: '只能输入10-9999之间的正整数！'
+        }
+    });
+
+    function generateCansMonitor(){
+        $.post('/scale/genCansMonitor',
+            function(result) {
+                if (result.success) {
+                    parent.$.messager.alert('提示', result.msg, 'info');
+
+                } else
+                    parent.$.messager.alert('提示', result.msg, 'error');
+                parent.$.messager.progress('close');
+            }, 'JSON');
+    }
+
+    function scaleUp(id){
+        parent.$.messager.confirm('询问', '您是否要顶升当前称？', function(b) {
+            if (b) {
+                parent.$.messager.progress({
+                    title : '提示',
+                    text : '数据处理中，请稍后....'
+                });
+                $.post('/scale/scaleUp', {
+                    id : id
+                }, function(result) {
+                    if (result.success) {
+                        parent.$.messager.show('提示', result.msg, 'info');
+
+                    } else
+                        parent.$.messager.show('提示', result.msg, 'error');
+                    parent.$.messager.progress('close');
+                }, 'JSON');
+            }
+        });
+    }
+
+    function scaleDown(id){
+        parent.$.messager.confirm('询问', '您是否要降下当前称？', function(b) {
+            if (b) {
+                parent.$.messager.progress({
+                    title : '提示',
+                    text : '数据处理中，请稍后....'
+                });
+                $.post('/scale/scaleDown', {
+                    id : id
+                }, function(result) {
+                    if (result.success) {
+                        parent.$.messager.show('提示', result.msg, 'info');
+
+                    } else
+                        parent.$.messager.show('提示', result.msg, 'error');
+                    parent.$.messager.progress('close');
+                }, 'JSON');
+            }
+        });
+    }
+</script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title=""
+         style="overflow: hidden;">
+        <table id="dataGrid"></table>
+    </div>
+</div>
+<div id="toolbar" style="display: none;">
+    <a onclick="addFun();" href="javascript:void(0);"
+       class="easyui-linkbutton"
+       data-options="plain:true,iconCls:'pencil_add'">添加</a> <a
+        onclick="cancelFun();" href="javascript:void(0);"
+        class="easyui-linkbutton"
+        data-options="plain:true,iconCls:'icon-redo'">撤销</a> <a
+        onclick="saveFun();" href="javascript:void(0);"
+        class="easyui-linkbutton"
+        data-options="plain:true,iconCls:'icon-save'">保存</a> <a
+        onclick="dataGrid.datagrid('reload');" href="javascript:void(0);"
+        class="easyui-linkbutton"
+        data-options="plain:true,iconCls:'transmit'">刷新</a><a
+        onclick="generateCansMonitor();" href="#;"
+        class="easyui-linkbutton"
+        data-options="plain:true,iconCls:'icon-large-clipart'">生成首页模板</a>
+
+</div>
+
+</body>
+</html>

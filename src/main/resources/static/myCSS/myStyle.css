@@ -1,0 +1,47 @@
+fieldset {
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #1E7ACE;
+    background:#fff;
+}
+fieldset legend {
+    color:#1E7ACE;
+    font-weight:bold;
+    padding:3px 20px 3px 20px;
+    border:1px solid #1E7ACE;
+    background:#fff;
+}
+/*    fieldset label {
+        float:left;
+        width:120px;
+        text-align:right;
+        padding:4px;
+        margin:1px;
+    }*/
+fieldset div {
+    clear:left;
+    margin-bottom:2px;
+}
+
+.showMessage {
+    padding: 10px 20px;
+    border-radius: 5px;
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    color: #ffffff;
+    z-index: 999;
+    transform: translate(-50%, 0);
+}
+
+.showMessageSuccess {
+    background-color: #f0f9eb;
+    border: 1px solid #E1F3D8;
+    color: #67c23a;
+}
+
+.showMessageError {
+    background-color: #fef0f0;
+    border: 1px solid #fde2e2;
+    color: #F76C6C;
+}
