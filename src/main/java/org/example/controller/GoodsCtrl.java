@@ -3,7 +3,6 @@ package org.example.controller;
 import org.example.pageModel.Json;
 import org.example.pageModel.Page;
 import org.example.pageModel.Pageable;
-import org.example.pojo.Course;
 import org.example.pojo.Goods;
 import org.example.service.GoodsService;
 import org.springframework.web.bind.annotation.RequestMapping;

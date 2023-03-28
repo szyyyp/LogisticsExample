@@ -19,6 +19,6 @@ public class GoodsType extends BaseEntity implements Serializable {
     @Column(name = "sname")
     String sname;
 
-    @Column(name = "mDescribe")
-    String mDescribe;
+    @Column(name = "addition")
+    String addition;
 }

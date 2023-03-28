@@ -79,13 +79,13 @@
                           }
                         },
                         {
-                          field : 'cpno',
-                          title : '先修课',
-                          sortable : true,
-                          width : 160,
-                          formatter: function(value, row, index) {
+                            field : 'cpno',
+                            title : '先修课',
+                            sortable : true,
+                            width : 160,
+                            formatter: function(value, row, index) {
                               return row.cpName;
-                          },
+                            },
                             editor : {type : 'combogrid',options : {required : false,
                                     panelWidth:280,
                                     panelHeight:450,
@@ -225,7 +225,7 @@
       dataGrid.datagrid('endEdit', editrow);
     }
     dataGrid.datagrid('removeEditor', [ 'id' ]);
-    let editRow = dataGrid.datagrid('getData').rows[index];
+    //let editRow = dataGrid.datagrid('getData').rows[index];
     // console.info(editRow);
 
     dataGrid.datagrid('beginEdit', index);

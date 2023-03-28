@@ -1,6 +1,7 @@
 package org.example.pojo;
 
 import lombok.Data;
+import org.example.util.DataUtil;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -20,24 +21,25 @@ public abstract class BaseEntity {
     String sno;
 
     @Column(name = "status")
-    Byte status;    // 状态
+    Byte status;    // 状态 0：未完成； 1 已完成
 
     @Column(name = "createBy")
     String createBy;
     @Column(name = "create_time", nullable = false, updatable = false)
-    Date createTime;
+    String  createTime;
 
     @Column(name = "update_time", nullable = false)
-    Date updateTime;
+    String updateTime;
 
     @PrePersist
     public void prePersist(){
-        this.setCreateTime(new Date());
-        this.setUpdateTime(new Date());
+        this.setCreateTime(DataUtil.getTime(new Date()));
+        this.setUpdateTime(DataUtil.getTime(new Date()));
+        this.setStatus((byte)0);
     }
 
     @PreUpdate
     public void preUpdate(){
-        this.setUpdateTime(new Date());
+        this.setUpdateTime(DataUtil.getTime(new Date()));
     }
 }

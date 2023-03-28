@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Data
 @Entity
-@Table(name = "t_GoodsType")
+@Table(name = "t_PurchasePlan")
 public class PurchasePlan extends BaseEntity implements Serializable {
     @Column(name = "warehouse")
     String warehouse;

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>商品数据</title>
+    <title>商品类别</title>
 </head>
 <link rel="stylesheet" type="text/css" href="easyUI/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="easyUI/themes/icon.css">
@@ -37,7 +37,7 @@
     dataGrid = $('#dataGrid')
             .datagrid(
                     {
-                      url : httphost + '/goods/getGoods',
+                      url : httphost + '/goodsType/getGoodsType',
                       pagination : true,
                       fitColumns : true,
                       fit : true,
@@ -55,7 +55,7 @@
                         width : 50,
                       }, {
                         field : 'sno',
-                        title : '商品编码',
+                        title : '类别编号',
                         width : 70,
                         sortable : true,
                         editor : {
@@ -68,7 +68,7 @@
                       columns : [ [
                         {
                           field : 'sname',
-                          title : '商品名称',
+                          title : '类别名称',
                           sortable : true,
                           width : 160,
                           editor : {
@@ -78,74 +78,22 @@
                             }
                           }
                         },
-                        {
-                          field : 'goodsTypePid',
-                          title : '商品类别',
-                          sortable : true,
-                          width : 60,
-                          formatter: function(value, row, index) {
-                            return row.goodType;
-                          },
-                          editor : {type : 'combogrid',options : {required : false,
-                                  panelWidth:380,
-                                  panelHeight:450,
-                                  idField : 'id',
-                                  textField : 'sname',
-                                  pagination : true,
-                                  fitColumns : true,
-                                  fit : true,
-                                  rownumbers : true,// 显示行号
-                                  singleSelect : true,// 只能单选
-                                  border : false,
-                                  striped : true,// 隔行变色
-                                  url: httphost + '/goodsType/getGoodsType',
-                                  pageList : [15,30,50],
-                                  columns:[[
-                                      {field:'id',title:'ID'},
-                                      {field:'sno',title:'类别编号',width : 60},
-                                      {field:'sname',title:'类别名称',align:'center'},
-                                      {field:'addition',title:'描述',width : 160},
-                                  ]],
-                                  onLoadSuccess: function (){
-
-                              }
-                          } }
-                        },{
-                          field : 'manufacturer',
-                          title : '生产商',
-                          width : 60,
+                         {
+                          field : 'addition',
+                          title : '描述',
+                          width : 180,
                           editor : {
                             type : 'validatebox',
                             options : {
-                              required : false,
+                              required : false
                             }
                           }
-                        }, {
-                          field : 'lifespan',
-                          title : '商品有效期(天)',
-                          width : 120,
-                          editor : {
-                            type : 'numberbox',
-                            options : {
-                              required : true
-                            }
-                          }
-                        }, {
-                              field : 'addition',
-                              title : '商品描述',
-                              width : 120,
-                              editor : {
-                                  type : 'validatebox',
-                                  options : {
-                                      required : false,
-                                  }
-                              }
-                          },
+                        },
 
                         {
                           field : 'actor',
                           title : '操作',
-                          width : 70,
+                          width : 170,
                           formatter : function(value, row, index) {
                             var str = '';
                             str += $
@@ -181,11 +129,11 @@
     var url = "";
     var data = {};
     if (inserted.length > 0) {
-      url = "/goods/add";
+      url = "/goodsType/add";
       data = inserted[0];
     }
     if (updated.length > 0) {
-      url = "/goods/edit";
+      url = "/goodsType/edit";
       data = updated[0];
     }
     if (url.length < 1)
@@ -198,9 +146,8 @@
       dataType : 'json',
       success : function(r) {
         if (r && r.success) {
-            parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
-          // dataGrid.datagrid('acceptChanges');
-            dataGrid.datagrid('reload');
+          parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
+          dataGrid.datagrid('acceptChanges');
         } else {
           parent.$.messager.alert('数据更新或插入', r.msg, 'error'); //easyui中的控件messager
           dataGrid.datagrid('rejectChanges');
@@ -224,7 +171,7 @@
             title : '提示',
             text : '数据处理中，请稍后....'
           });
-          $.post('/student/del', {
+          $.post('/goodsType/del', {
             id : rows[0].id
           }, function(result) {
             if (result.success) {
@@ -244,7 +191,7 @@
       dataGrid.datagrid('endEdit', editrow);
     }
     dataGrid.datagrid('removeEditor', [ 'id' ]);
-    //let editRow = dataGrid.datagrid('getData').rows[index];
+    let editRow = dataGrid.datagrid('getData').rows[index];
     // console.info(editRow);
 
     dataGrid.datagrid('beginEdit', index);

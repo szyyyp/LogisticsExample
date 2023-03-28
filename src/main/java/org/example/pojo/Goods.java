@@ -31,8 +31,8 @@ public class Goods extends BaseEntity implements Serializable {
     @Column(name = "lifespan")
     Integer lifespan;       // 商品有效期
 
-    @Column(name = "mDescribe")
-    String mDescribe;   //描述
+    @Column(name = "addition")
+    String addition;   //附加说明
 
     @Transient
     public String getGoodType(){
@@ -40,5 +40,13 @@ public class Goods extends BaseEntity implements Serializable {
             return goodsType.getSname();
         else
             return "";
+    }
+
+    @Transient
+    public Integer getGoodsTypePid(){
+        if (goodsType!=null)
+            return goodsType.getId();
+        else
+            return null;
     }
 }

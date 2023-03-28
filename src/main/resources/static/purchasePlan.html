@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>采购计划单</title>
+</head>
+<link rel="stylesheet" type="text/css" href="easyUI/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="easyUI/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="easyUI/themes/myicon.css">
+<link rel="stylesheet" type="text/css" href="easyUI/themes/color.css">
+<link rel="stylesheet" type="text/css" href="myCSS/demo.css">
+
+<script type="text/javascript" src="easyUI/jquery.js"></script>
+<script type="text/javascript" src="easyUI/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="easyUI/locale/easyui-lang-zh_CN.js"></script>
+
+<script type="text/javascript" src="easyUI/extJquery.js"></script>
+<script type="text/javascript" src="easyUI/extEasyUI.js"></script>
+<script type="text/javascript" src="myJs/showMessage.js"></script>
+
+<script type="text/javascript">
+    var dataGrid;
+    $(function() {
+        editrow = 'undefined'; //行编辑开关
+        dataGrid = $('#dataGrid')
+            .datagrid({
+                url : httphost + '/purchasePlan/getData',
+                pagination : true,
+                fitColumns : true,					fit : true,
+                rownumbers : true,// 显示行号
+                singleSelect : true,// 只能单选
+                border : false,
+                striped : true,// 隔行变色
+                idField : 'id', // 主键字段
+                pageSize : 300,
+                pageList : [100,300,500,1000,2000 ],
+                frozenColumns : [ [ {
+                    field : 'id',
+                    title : 'ID',
+                    align : 'center',
+                    hidden: true,
+                    width : 80,
+                }, {
+                    field : 'sno',
+                    title : '订单编号',
+                    width : 140,
+                    align: "center",
+                    sortable : true,
+                },  {
+                    field : 'createby',
+                    title : '制单人',
+                    width : 110,
+                    align: "center",
+                    sortable : true,
+                },{
+                    field : 'createTime',
+                    title : '制单日期',
+                    align : 'center',
+                    width : 160,
+                }  ] ],
+                columns : [ [
+                    {	field : 'dueDate',
+                        title : '要求完成日期',
+                        width : 180,
+                        sortable : true,
+                        align : "center",
+                    },
+                    {
+                        field : 'actor',
+                        title : '操作',
+                        width : 170,
+                        formatter : function(value, row, index) {
+                            var str = '';
+                            str += $
+                                .formatString(
+                                    '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
+                                    row.id,
+                                    'easyUI/themes/extjs_icons/pencil.png');
+                            //注销删除按钮
+                            str += '&nbsp;&nbsp;';
+                            str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, 'easyUI/themes/extjs_icons/cancel.png');
+
+                            return str;
+                        }
+                    }
+                ] ],
+                toolbar : '#toolbar',
+
+                onLoadSuccess : function() {
+                    parent.$.messager.progress('close');
+
+                    $(this).datagrid('tooltip');
+                },
+            });
+        $('#canID').combobox({
+            valueField:'canID',
+            textField:'canID',
+            url: httphost + '/realWeight/getMeters'
+        })
+    });
+
+    // 查询
+    function doSearch() {
+        // 取得查询条件，发送给后台
+        //console.info($('#station').combobox('getValue'));
+        $('#dataGrid').datagrid('load', {
+            // 参数名与后台pojo属性名一致即可自动填充
+            // 'canID' : $('#canID').combobox('getValue'),
+            'sno' : $('#sno').val(),
+            // 支持级联属性填充
+            'start' :  $('#start').datetimebox('getValue'),
+            'end' :  $('#end').datetimebox('getValue')
+        });
+    }
+
+    function clearHisData(){
+        var flag=confirm("确认要删除吗?");
+        if(flag){
+            $.ajax({
+                url : httphost + '/realWeight/clearHisRealWeight',
+                /* data : data,
+                dataType : 'json', */
+                success : function(r) {
+                    if (r && r.success) {
+                        parent.$.messager.alert('实时重量数据删除', r.msg); //
+                        dataGrid.datagrid('reload');
+                    } else {
+                        parent.$.messager.alert('实时重量数据删除', r.msg, 'error');
+
+                    }
+                }
+            });
+        }
+    }
+
+    function clearSearch() {
+        $('#dataGrid').datagrid('load', {});
+        $('#canID').combobox('setValue','');
+        $('#start').datetimebox('setValue','');
+        $('#end').datetimebox('setValue','');
+    }
+
+    function exportExcel(){
+
+        openBlank('exportExcel', {
+            'canID' : $('#canID').combobox('getValue'),
+            'start' :  $('#start').datetimebox('getValue'),
+            'end' :  $('#end').datetimebox('getValue')
+        }) ;
+
+    }
+
+    /**
+     *
+     * @param id    计划单的 数据库 id
+     */
+    function deleteFun(id) {
+
+    }
+
+    /**
+     *
+     * @param id    计划单的 数据库 id
+     */
+    function editFun(id) {
+
+    }
+
+    function addPlans(){
+
+    }
+
+</script>
+</head>
+<body>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title=""
+         style="overflow: hidden;">
+        <table id="dataGrid"></table>
+    </div>
+</div>
+<div id="toolbar" style="display: none;">
+    <a	onclick="addPlans();" href="javascript:void(0);"
+          class="easyui-linkbutton"
+          data-options="plain:true,iconCls:'icon-add'">添加计划单</a>&nbsp;&nbsp;
+    <a	onclick="dataGrid.datagrid('reload');" href="javascript:void(0);"
+          class="easyui-linkbutton"
+          data-options="plain:true,iconCls:'transmit'">刷新</a>&nbsp;&nbsp;
+    <a	onclick="exportExcel();" href="javascript:void(0);"
+          class="easyui-linkbutton"
+          data-options="plain:true,iconCls:'export_excel'">导出Excel</a>
+
+    <a href="javascript:void(0)" class="easyui-linkbutton"
+       data-options="plain:true,iconCls:'icon-cancel'" onclick="clearHisData()">清空2天前的所有采购计划单</a>
+
+    <div  style="border: 3px ;height:60px ;overflow:hidden">
+        <form>
+            <table>
+                <tr>
+                    <td>计划单号：</td><td><input id="sno" name="sno" ></td>
+                    <td><a href="javascript:void(0)" class="easyui-linkbutton"
+                           plain="false" onclick="doSearch()" iconCls="icon-search">查询</a>&nbsp;&nbsp;
+                        <a href="javascript:void(0)" class="easyui-linkbutton"
+                           plain="false" onclick="clearSearch()" iconCls="icon-redo">清空</a>&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>制单日期起: </td><td><input id="start" name="start" class="easyui-datetimebox" ></td>
+                    <td>制单日期止: </td><td><input id="end" name="end" class="easyui-datetimebox" ></td>
+
+                </tr>
+
+            </table>
+        </form>
+    </div>
+</div>
+<div id="qxwin" >
+
+</div>
+</body>
+</html>

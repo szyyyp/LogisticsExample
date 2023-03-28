@@ -41,4 +41,12 @@ public class Course implements Serializable {
         else
             return "";
     }
+
+    @Transient
+    public Integer getCpno(){
+        if (course!=null)
+            return course.getId();
+        else
+            return null;
+    }
 }
