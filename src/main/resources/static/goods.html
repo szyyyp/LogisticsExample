@@ -19,296 +19,335 @@
 <script type="text/javascript" src="myJs/showMessage.js"></script>
 
 <style>
-  .datagrid-header-row .datagrid-cell span {
-    white-space: normal !important;
-    word-wrap: normal !important;
-  }
+    .datagrid-header-row .datagrid-cell span {
+        white-space: normal !important;
+        word-wrap: normal !important;
+    }
 </style>
 <script type="text/javascript">
-  let dataGrid;
+    let dataGrid;
 
-  $(function() {
-    $('#dataGrid').pagination({
-      total:2000,
-      pageSize:30
-    });
+    $(function() {
+        $('#dataGrid').pagination({
+            total:2000,
+            pageSize:30
+        });
 
-    editrow = 'undefined'; //行编辑开关
-    dataGrid = $('#dataGrid')
+        editrow = 'undefined'; //行编辑开关
+        dataGrid = $('#dataGrid')
             .datagrid(
-                    {
-                      url : httphost + '/goods/getGoods',
-                      pagination : true,
-                      fitColumns : true,
-                      fit : true,
-                      rownumbers : true,// 显示行号
-                      singleSelect : true,// 只能单选
-                      border : false,
-                      striped : true,// 隔行变色
-                      idField : 'id', // 主键字段
-                      pageList : [ 30, 50, 100, 1000, 2000 ],
-                      frozenColumns : [ [ {
+                {
+                    url : httphost + '/goods/getGoods',
+                    pagination : true,
+                    fitColumns : true,
+                    fit : true,
+                    rownumbers : true,// 显示行号
+                    singleSelect : true,// 只能单选
+                    border : false,
+                    striped : true,// 隔行变色
+                    idField : 'id', // 主键字段
+                    pageList : [ 30, 50, 100, 1000, 2000 ],
+                    frozenColumns : [ [ {
                         field : 'id',
                         title : 'ID',
                         align : 'center',
                         hidden: true,
                         width : 50,
-                      }, {
+                    }, {
                         field : 'sno',
                         title : '商品编码',
                         width : 70,
                         sortable : true,
                         editor : {
-                          type : 'validatebox',
-                          options : {
-                            required : false
-                          }
-                        }
-                      } ] ],
-                      columns : [ [
-                        {
-                          field : 'sname',
-                          title : '商品名称',
-                          sortable : true,
-                          width : 160,
-                          editor : {
                             type : 'validatebox',
                             options : {
-                              required : true,
+                                required : false
                             }
-                          }
+                        }
+                    } ] ],
+                    columns : [ [
+                        {
+                            field : 'sname',
+                            title : '商品名称',
+                            sortable : true,
+                            width : 160,
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : true,
+                                }
+                            }
                         },
                         {
-                          field : 'goodsTypePid',
-                          title : '商品类别',
-                          sortable : true,
-                          width : 60,
-                          formatter: function(value, row, index) {
-                            return row.goodType;
-                          },
-                          editor : {type : 'combogrid',options : {required : false,
-                                  panelWidth:380,
-                                  panelHeight:450,
-                                  idField : 'id',
-                                  textField : 'sname',
-                                  pagination : true,
-                                  fitColumns : true,
-                                  fit : true,
-                                  rownumbers : true,// 显示行号
-                                  singleSelect : true,// 只能单选
-                                  border : false,
-                                  striped : true,// 隔行变色
-                                  url: httphost + '/goodsType/getGoodsType',
-                                  pageList : [15,30,50],
-                                  columns:[[
-                                      {field:'id',title:'ID'},
-                                      {field:'sno',title:'类别编号',width : 60},
-                                      {field:'sname',title:'类别名称',align:'center'},
-                                      {field:'addition',title:'描述',width : 160},
-                                  ]],
-                                  onLoadSuccess: function (){
+                            field : 'goodsTypePid',
+                            title : '商品类别',
+                            sortable : true,
+                            width : 60,
+                            formatter: function(value, row, index) {
+                                return row.goodType;
+                            },
+                            editor : {type : 'combogrid',options : {required : false,
+                                    panelWidth:380,
+                                    panelHeight:450,
+                                    idField : 'id',
+                                    textField : 'sname',
+                                    pagination : true,
+                                    fitColumns : true,
+                                    fit : true,
+                                    rownumbers : true,// 显示行号
+                                    singleSelect : true,// 只能单选
+                                    border : false,
+                                    striped : true,// 隔行变色
+                                    url: httphost + '/goodsType/getGoodsType',
+                                    pageList : [15,30,50],
+                                    columns:[[
+                                        {field:'id',title:'ID'},
+                                        {field:'sno',title:'类别编号',width : 60},
+                                        {field:'sname',title:'类别名称',align:'center'},
+                                        {field:'addition',title:'描述',width : 160},
+                                    ]],
+                                    onLoadSuccess: function (){
 
-                              }
-                          } }
+                                    }
+                                } }
                         },{
-                          field : 'manufacturer',
-                          title : '生产商',
-                          width : 60,
-                          editor : {
-                            type : 'validatebox',
-                            options : {
-                              required : false,
+                            field : 'manufacturer',
+                            title : '生产商',
+                            width : 60,
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : false,
+                                }
                             }
-                          }
                         }, {
-                          field : 'lifespan',
-                          title : '商品有效期(天)',
-                          width : 120,
-                          editor : {
-                            type : 'numberbox',
-                            options : {
-                              required : true
+                            field : 'lifespan',
+                            title : '商品有效期(天)',
+                            width : 120,
+                            editor : {
+                                type : 'numberbox',
+                                options : {
+                                    required : true
+                                }
                             }
-                          }
                         }, {
-                              field : 'addition',
-                              title : '商品描述',
-                              width : 120,
-                              editor : {
-                                  type : 'validatebox',
-                                  options : {
-                                      required : false,
-                                  }
-                              }
-                          },
+                            field : 'addition',
+                            title : '商品描述',
+                            width : 120,
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : false,
+                                }
+                            }
+                        },
 
                         {
-                          field : 'actor',
-                          title : '操作',
-                          width : 70,
-                          formatter : function(value, row, index) {
-                            var str = '';
-                            str += $
+                            field : 'actor',
+                            title : '操作',
+                            width : 70,
+                            formatter : function(value, row, index) {
+                                var str = '';
+                                str += $
                                     .formatString(
-                                            '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
-                                            index,
-                                            'easyUI/themes/extjs_icons/pencil.png');
-                            //
-                            // // 注销删除按钮
-                            str += '&nbsp;&nbsp;';
-                            str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', index, 'easyUI/themes/extjs_icons/cancel.png');
+                                        '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
+                                        index,
+                                        'easyUI/themes/extjs_icons/pencil.png');
+                                //
+                                // // 注销删除按钮
+                                str += '&nbsp;&nbsp;';
+                                str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', index, 'easyUI/themes/extjs_icons/cancel.png');
 
-                            return str;
-                          }
+                                return str;
+                            }
                         } ] ],
-                      toolbar : '#toolbar',
+                    toolbar : '#toolbar',
 
-                      onLoadSuccess : function() {
+                    onLoadSuccess : function() {
                         parent.$.messager.progress('close');
 
                         $(this).datagrid('tooltip');
-                      },
-                      onAfterEdit : function(rowIndex, rowData, changes) {
+                    },
+                    onAfterEdit : function(rowIndex, rowData, changes) {
                         //console.info(rowData);
                         afterEdit(rowIndex, rowData, changes);
-                      }
-                    });
-  });
-
-  function afterEdit(rowIndex, rowData, changes) {
-    var inserted = dataGrid.datagrid('getChanges', 'inserted');
-    var updated = dataGrid.datagrid('getChanges', 'updated');
-    var url = "";
-    var data = {};
-    if (inserted.length > 0) {
-      url = "/goods/add";
-      data = inserted[0];
-    }
-    if (updated.length > 0) {
-      url = "/goods/edit";
-      data = updated[0];
-    }
-    if (url.length < 1)
-      return;
-    //console.info(url);
-    $.ajax({
-      type : "POST",
-      url : url,
-      data : data,
-      dataType : 'json',
-      success : function(r) {
-        if (r && r.success) {
-            parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
-          // dataGrid.datagrid('acceptChanges');
-            dataGrid.datagrid('reload');
-        } else {
-          parent.$.messager.alert('数据更新或插入', r.msg, 'error'); //easyui中的控件messager
-          dataGrid.datagrid('rejectChanges');
-        }
-      }
+                    }
+                });
+        $('#goodsTypePid').combogrid({
+            panelWidth:380,
+            panelHeight:450,
+            idField : 'id',
+            textField : 'sname',
+            pagination : true,
+            fitColumns : true,
+            fit : true,
+            rownumbers : true,// 显示行号
+            singleSelect : true,// 只能单选
+            border : false,
+            striped : true,// 隔行变色
+            url: httphost + '/goodsType/getGoodsType',
+            pageList : [15,30,50],
+            columns:[[
+                {field:'id',title:'ID'},
+                {field:'sno',title:'类别编号',width : 60},
+                {field:'sname',title:'类别名称',align:'center'},
+                {field:'addition',title:'描述',width : 160},
+            ]],
+        })
     });
-    editrow = 'undefined'; //开关复位
-  }
 
-  function deleteFun(id) {
-    //console.info(id);
-    if (id != undefined) {
-      dataGrid.datagrid('selectRow', id);
-    }
-    var rows = dataGrid.datagrid('getSelections');
-    //console.info(rows);
-    if (rows.length > 0) {
-      parent.$.messager.confirm('询问', '您是否要删除当前称？', function(b) {
-        if (b) {
-          parent.$.messager.progress({
-            title : '提示',
-            text : '数据处理中，请稍后....'
-          });
-          $.post('/student/del', {
-            id : rows[0].id
-          }, function(result) {
-            if (result.success) {
-              parent.$.messager.alert('提示', result.msg, 'info');
-              dataGrid.datagrid('reload');
-            } else
-              parent.$.messager.alert('提示', result.msg, 'error');
-            parent.$.messager.progress('close');
-          }, 'JSON');
+    function afterEdit(rowIndex, rowData, changes) {
+        var inserted = dataGrid.datagrid('getChanges', 'inserted');
+        var updated = dataGrid.datagrid('getChanges', 'updated');
+        var url = "";
+        var data = {};
+        if (inserted.length > 0) {
+            url = "/goods/add";
+            data = inserted[0];
         }
-      });
+        if (updated.length > 0) {
+            url = "/goods/edit";
+            data = updated[0];
+        }
+        if (url.length < 1)
+            return;
+        //console.info(url);
+        $.ajax({
+            type : "POST",
+            url : url,
+            data : data,
+            dataType : 'json',
+            success : function(r) {
+                if (r && r.success) {
+                    parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
+                    // dataGrid.datagrid('acceptChanges');
+                    dataGrid.datagrid('reload');
+                } else {
+                    parent.$.messager.alert('数据更新或插入', r.msg, 'error'); //easyui中的控件messager
+                    dataGrid.datagrid('rejectChanges');
+                }
+            }
+        });
+        editrow = 'undefined'; //开关复位
     }
-  }
 
-  function editFun(index) {
-    if (editrow != 'undefined') {
-      dataGrid.datagrid('endEdit', editrow);
+    function deleteFun(id) {
+        //console.info(id);
+        if (id != undefined) {
+            dataGrid.datagrid('selectRow', id);
+        }
+        var rows = dataGrid.datagrid('getSelections');
+        //console.info(rows);
+        if (rows.length > 0) {
+            parent.$.messager.confirm('询问', '您是否要删除当前称？', function(b) {
+                if (b) {
+                    parent.$.messager.progress({
+                        title : '提示',
+                        text : '数据处理中，请稍后....'
+                    });
+                    $.post('/student/del', {
+                        id : rows[0].id
+                    }, function(result) {
+                        if (result.success) {
+                            parent.$.messager.alert('提示', result.msg, 'info');
+                            dataGrid.datagrid('reload');
+                        } else
+                            parent.$.messager.alert('提示', result.msg, 'error');
+                        parent.$.messager.progress('close');
+                    }, 'JSON');
+                }
+            });
+        }
     }
-    dataGrid.datagrid('removeEditor', [ 'id' ]);
-    //let editRow = dataGrid.datagrid('getData').rows[index];
-    // console.info(editRow);
 
-    dataGrid.datagrid('beginEdit', index);
-    editrow = index;
-  }
+    function editFun(index) {
+        if (editrow != 'undefined') {
+            dataGrid.datagrid('endEdit', editrow);
+        }
+        dataGrid.datagrid('removeEditor', [ 'id' ]);
+        //let editRow = dataGrid.datagrid('getData').rows[index];
+        // console.info(editRow);
 
-  function addFun() {
-    if (editrow != 'undefined') {
-      dataGrid.datagrid('endEdit', editrow);
+        dataGrid.datagrid('beginEdit', index);
+        editrow = index;
     }
-    if (editrow == 'undefined') {
-      /*            dataGrid.datagrid('addEditor', {
-                      field : 'id',
-                      editor : {
-                          type : 'validatebox',
-                          options : {
-                              required : true
-                          }
-                      }
-                  });*/
-      dataGrid.datagrid('insertRow', {
-        index : 0,
-        row : {}
-      });
-      dataGrid.datagrid('beginEdit', 0);
-      editrow = 0;
+
+    function addFun() {
+        if (editrow != 'undefined') {
+            dataGrid.datagrid('endEdit', editrow);
+        }
+        if (editrow == 'undefined') {
+            /*            dataGrid.datagrid('addEditor', {
+                            field : 'id',
+                            editor : {
+                                type : 'validatebox',
+                                options : {
+                                    required : true
+                                }
+                            }
+                        });*/
+            dataGrid.datagrid('insertRow', {
+                index : 0,
+                row : {}
+            });
+            dataGrid.datagrid('beginEdit', 0);
+            editrow = 0;
+        }
     }
-  }
 
-  function saveFun() {
-    //console.info(editrow);
-    dataGrid.datagrid('endEdit', editrow); //editrow 为本页面的局部变量
-  }
-
-  function cancelFun() {
-    editrow = 'undefined'; //开关复位
-    dataGrid.datagrid('rejectChanges');
-    dataGrid.datagrid('unselectAll');
-  }
-
-  $.extend($.fn.validatebox.defaults.rules, {
-    myvalid: {
-      validator: function (value, param) {
-        //return /^[A-F\d]{5}$/.test(value)//其他长度注意改正则,只能输入A-F或数字且长度为5！
-        return /^[\d]{2,4}$/.test(value)   //验证1-999之间的所有正整数
-      },
-      message: '只能输入10-9999之间的正整数！'
+    function saveFun() {
+        //console.info(editrow);
+        dataGrid.datagrid('endEdit', editrow); //editrow 为本页面的局部变量
     }
-  });
 
+    function cancelFun() {
+        editrow = 'undefined'; //开关复位
+        dataGrid.datagrid('rejectChanges');
+        dataGrid.datagrid('unselectAll');
+    }
+
+    $.extend($.fn.validatebox.defaults.rules, {
+        myvalid: {
+            validator: function (value, param) {
+                //return /^[A-F\d]{5}$/.test(value)//其他长度注意改正则,只能输入A-F或数字且长度为5！
+                return /^[\d]{2,4}$/.test(value)   //验证1-999之间的所有正整数
+            },
+            message: '只能输入10-9999之间的正整数！'
+        }
+    });
+
+    function doSearch() {
+        // 取得查询条件，发送给后台
+        //console.info($('#station').combobox('getValue'));
+        $('#dataGrid').datagrid('load', {
+            // 参数名与后台pojo属性名一致即可自动填充
+            // 'canID' : $('#canID').combobox('getValue'),
+            'sno' : $('#sno').val(),
+            'sname' : $('#sname').val(),
+            'goodsTypePid' : $('#goodsTypePid').combogrid('getValue'),
+            'yxqq' : $('#yxqq').val(),
+            'yxqz' : $('#yxqz').val(),
+
+            // 支持级联属性填充
+            'start' :  $('#start').datetimebox('getValue'),
+            'end' :  $('#end').datetimebox('getValue')
+
+        });
+    }
 
 </script>
 </head>
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false">
-  <div data-options="region:'center',border:false" title=""
-       style="overflow: hidden;">
-    <table id="dataGrid"></table>
-  </div>
+    <div data-options="region:'center',border:false" title=""
+         style="overflow: hidden;">
+        <table id="dataGrid"></table>
+    </div>
 </div>
 <div id="toolbar" style="display: none;">
-  <a onclick="addFun();" href="javascript:void(0);"
-     class="easyui-linkbutton"
-     data-options="plain:true,iconCls:'pencil_add'">添加</a> <a
+    <a onclick="addFun();" href="javascript:void(0);"
+       class="easyui-linkbutton"
+       data-options="plain:true,iconCls:'pencil_add'">添加</a> <a
         onclick="cancelFun();" href="javascript:void(0);"
         class="easyui-linkbutton"
         data-options="plain:true,iconCls:'icon-redo'">撤销</a> <a
@@ -318,7 +357,35 @@
         onclick="dataGrid.datagrid('reload');" href="javascript:void(0);"
         class="easyui-linkbutton"
         data-options="plain:true,iconCls:'transmit'">刷新</a>
+    <a	onclick="exportExcel();" href="javascript:void(0);"
+          class="easyui-linkbutton"
+          data-options="plain:true,iconCls:'export_excel'">导出Excel</a>
 
+    <div  style="border: 3px ;height:60px ;overflow:hidden">
+        <form>
+            <table>
+                <tr>
+                    <td>商品编号：</td><td><input id="sno" name="sno" ></td>
+                    <td>商品名称：</td><td><input id="sname" name="sname" ></td>
+                    <td>商品类别：</td><td><input id="goodsTypePid" name="goodsTypePid" ></td>
+
+                    <td><a href="javascript:void(0)" class="easyui-linkbutton"
+                           plain="false" onclick="doSearch()" iconCls="icon-search">查询</a>&nbsp;&nbsp;
+                        <a href="javascript:void(0)" class="easyui-linkbutton"
+                           plain="false" onclick="clearSearch()" iconCls="icon-redo">清空</a>&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>制单日期起: </td><td><input id="start" name="start" class="easyui-datetimebox" ></td>
+                    <td>制单日期止: </td><td><input id="end" name="end" class="easyui-datetimebox" ></td>
+                    <td>商品有效起：</td><td><input id="yxqq" name="yxqq" ></td>
+                    <td>商品有效止：</td><td><input id="yxqz" name="yxqqz" ></td>
+                </tr>
+
+            </table>
+        </form>
+
+    </div>
 </div>
 
 </body>

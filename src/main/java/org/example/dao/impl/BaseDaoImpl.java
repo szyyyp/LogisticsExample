@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Dao - 基类
@@ -119,11 +120,30 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 		// end of modify by szy at 20160615
 		return findPage(criteriaQuery, pageable);
 	}
-	
+
+	/**
+	 *  获取对象的所有属性，包括父对象
+	 * @param class1
+	 * @return
+	 */
+	private static List<Field> getAllField(Class<?> class1){
+		List<Field> list= new ArrayList();
+		while (class1!= Object.class){
+			list.addAll(Arrays.stream(class1.getDeclaredFields()).collect(Collectors.toList()));
+			//获取父类
+			class1=class1.getSuperclass();
+		}
+		return list;
+	}
+
 	private List<Filter> getFilters(T t){
 		List<Filter> filters = new ArrayList<Filter>();
-		Field[] fields = t.getClass().getDeclaredFields(); // 获取对象的所有属性对象：type，name，value
+		// Field[] fields = t.getClass().getDeclaredFields(); // 获取对象的所有属性对象：type，name，value
+
+		List<Field> fields = getAllField (t.getClass());
+
 		for (Field fd : fields) {
+			fd.setAccessible(true);
 			String name = fd.getName();
 			if (name.equals("serialVersionUID"))
 				continue;
