@@ -335,6 +335,17 @@
         });
     }
 
+    function clearSearch() {
+        $('#dataGrid').datagrid('load', {});
+        $('#sno').val('');
+        $('#sname').val('');
+        $('#goodsTypePid').combogrid('setValue','');
+        $('#start').datetimebox('setValue','');
+        $('#end').datetimebox('setValue','');
+        $('#yxqq').val('');
+        $('#yxqz').val('');
+    }
+
 </script>
 </head>
 <body>
@@ -378,8 +389,8 @@
                 <tr>
                     <td>制单日期起: </td><td><input id="start" name="start" class="easyui-datetimebox" ></td>
                     <td>制单日期止: </td><td><input id="end" name="end" class="easyui-datetimebox" ></td>
-                    <td>商品有效起：</td><td><input id="yxqq" name="yxqq" ></td>
-                    <td>商品有效止：</td><td><input id="yxqz" name="yxqqz" ></td>
+                    <td>商品有效起 (天)：</td><td><input id="yxqq" name="yxqq" ></td>
+                    <td>商品有效止 (天)：</td><td><input id="yxqz" name="yxqqz" ></td>
                 </tr>
 
             </table>

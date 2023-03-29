@@ -58,6 +58,13 @@ public class GoodsCtrl {
             ft.setOperator(Filter.Operator.le);
             filters.add(ft);
         }
+        if(goodsTypePid!=null){
+            Filter ft = new Filter();
+            ft.setProperty("goodsType");
+            ft.setValue(goodsTypePid);
+            ft.setOperator(Filter.Operator.eq);
+            filters.add(ft);
+        }
         page.setFilters(filters);
         return goodsService.findPage(page,goods);
     }
