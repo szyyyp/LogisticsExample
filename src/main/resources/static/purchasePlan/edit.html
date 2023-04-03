@@ -42,79 +42,91 @@
 					fitColumns : true,
 					fit : true,
 					rownumbers : true,
-					singleSelect : true,
+					//singleSelect : true,
 					border : false,
 					striped : true,
 					idField : 'id',
 					pageSize : 20,
 					pageList : [10,20,50,100,200 ],
-					frozenColumns : [ [ {
-						field : 'id',
-						title : 'ID',
-						align : 'center',
-						hidden: true,
-						width : 80,
-					}, {
-						field : 'goodsPid',
-						title : '商品名称',
-						width : 140,
-						align: "center",
-						formatter: function(value, row, index) {
-							return row.goodsName;
-						},
-						editor : {type : 'combogrid',options : {required : false,
-								panelWidth:380,
-								panelHeight:450,
-								idField : 'id',
-								textField : 'sname',
-								pagination : true,
-								fitColumns : true,
-								fit : true,
-								rownumbers : true,// 显示行号
-								singleSelect : true,// 只能单选
-								border : false,
-								striped : true,// 隔行变色
-								url: httphost + '/goods/getGoods',
-								pageList : [15,30,50],
-								keyHandler:{
-									query: function (q) {
-										$('#comboGrid-editor').combogrid('grid').datagrid('load', {sname: q});
-										$('#comboGrid-editor').combogrid('setValue',q);
+					frozenColumns : [ [
+						{
+							field : 'id',
+							title : 'ID',
+							align : 'center',
+							checkbox: true,
+							width : 80,
+						}, {
+							field : 'goodsPid',
+							title : '商品名称',
+							width : 140,
+							align: "center",
+							formatter: function(value, row, index) {
+								return row.goodsName;
+							},
+							editor : {type : 'combogrid',options : {required : false,
+									panelWidth:380,
+									panelHeight:450,
+									idField : 'id',
+									textField : 'sname',
+									pagination : true,
+									fitColumns : true,
+									fit : true,
+									rownumbers : true,// 显示行号
+									singleSelect : true,// 只能单选
+									border : false,
+									striped : true,// 隔行变色
+									url: httphost + '/goods/getGoods',
+									pageList : [15,30,50],
+									keyHandler:{
+										query: function (q) {
+											$('#comboGrid-editor').combogrid('grid').datagrid('load', {sname: q});
+											$('#comboGrid-editor').combogrid('setValue',q);
+										}
+									} ,
+									columns:[[
+										{field:'id',title:'ID'},
+										{field:'sno',title:'商品编号',width : 60},
+										{field:'sname',title:'商品名称',align:'center'},
+										{field:'goodType',title:'商品类别',width : 160},
+									]],
+									onSelect: function(row, rowData){
+										//rowData.hmNo=rowData.hmNo+rowData.tpcNo;
+										//rowData.tpcNo=rowData.hmNo+rowData.tpcNo;
+										var rowIndex= editrow; //dataGrid.datagrid('getRowIndex',dataGrid.datagrid('getSelected'));
+										dataGrid.datagrid('beginEdit', rowIndex);
+										let editors = dataGrid.datagrid('getEditors', rowIndex);
+										// console.info(editors);
+										let goodType = dataGrid.datagrid('getEditor', { index: rowIndex, field: 'goodsTypeName' });
+										/*	ed.target.textbox('setValue',rowData.USERNAME);//textbox赋值方法
+                                            $(ed.target).val(rowData.USERNAME);//text赋值方法*/
+										// console.info(goodType);
+										$(goodType.target).val(rowData.goodType);
+										let goodsName = dataGrid.datagrid('getEditor', { index: rowIndex, field: 'goodsName' });
+										$(goodsName.target).val(rowData.sname);
 									}
-								} ,
-								columns:[[
-									{field:'id',title:'ID'},
-									{field:'sno',title:'商品编号',width : 60},
-									{field:'sname',title:'商品名称',align:'center'},
-									{field:'goodType',title:'商品类别',width : 160},
-								]],
-								onSelect: function(row, rowData){
-									//rowData.hmNo=rowData.hmNo+rowData.tpcNo;
-									//rowData.tpcNo=rowData.hmNo+rowData.tpcNo;
-									var rowIndex= dataGrid.datagrid('getRowIndex',dataGrid.datagrid('getSelected'));
-									dataGrid.datagrid('beginEdit', rowIndex);
-									let editors = dataGrid.datagrid('getEditors', rowIndex);
-									console.info(editors);
-									let goodType = dataGrid.datagrid('getEditor', { index: rowIndex, field: 'goodsTypeName' });
-									//console.info(rowData.goodType);
-									/*	ed.target.textbox('setValue',rowData.USERNAME);//textbox赋值方法
-                                        $(ed.target).val(rowData.USERNAME);//text赋值方法*/
-									$(goodType.target).val(rowData.goodType);
-								}
-							} },
-						onChange:function (rowIndex, rowData, changes){
-							console.info(rowData);
-						}
-					}, {
-						field : 'goodsTypeName',
-						title : '商品类别',
-						width : 140,
-						align: "center",
-						sortable : true,
-						editor: {
-							type: 'text',
-						}
-					}
+								} },
+
+						}, {
+							field : 'goodsName',
+							title : '商品类别',
+							width : 140,
+							align: "center",
+							hidden: true,
+							sortable : true,
+							editor: {
+								type: 'text',
+							}
+						},
+						{
+							field : 'goodsTypeName',
+							title : '商品类别',
+							width : 140,
+							align: "center",
+							sortable : true,
+							editor: {
+								type: 'text',
+							}
+						},
 					] ],
 					columns : [ [
 						{
@@ -147,24 +159,7 @@
 							align : 'center',
 							width : 160,
 						} ,
-						{
-							field : 'actor',
-							title : '操作',
-							width : 170,
-							formatter : function(value, row, index) {
-								var str = '';
-								str += $
-										.formatString(
-												'<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
-												index,
-												'../../easyUI/themes/extjs_icons/pencil.png');
 
-								str += '&nbsp;&nbsp;';
-								str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', index, '../../easyUI/themes/extjs_icons/cancel.png');
-
-								return str;
-							}
-						}
 					] ],
 					toolbar : '#toolbar',
 
@@ -173,8 +168,12 @@
 
 						$(this).datagrid('tooltip');
 					},
-					onEndEdit : function (index, row, changes){
-
+					onAfterEdit : function(rowIndex, rowData, changes) {
+						//console.info(rowData);
+						afterEdit(rowIndex, rowData, changes);
+					},
+					onDblClickRow: function (index, row){
+						editFun(index);
 					}
 				});
 		afterSuccessLoad();
@@ -209,46 +208,73 @@
 
 
 	function editFun(index) {
+
 		if (editrow != 'undefined') {
 			dataGrid.datagrid('endEdit', editrow);
 		}
 		dataGrid.datagrid('removeEditor', [ 'id' ]);
-		//let editRow = dataGrid.datagrid('getData').rows[index];
-		// console.info(editRow);
-
 		dataGrid.datagrid('beginEdit', index);
 		editrow = index;
 	}
 
-	function deleteFun(id) {
+	function deleteFun( ) {
 		//console.info(id);
-		if (id != undefined) {
-			dataGrid.datagrid('selectRow', id);
-		}
-		var rows = dataGrid.datagrid('getSelections');
+
+		let rows = dataGrid.datagrid('getChecked');
 		//console.info(rows);
 		if (rows.length > 0) {
-			parent.$.messager.confirm('询问', '您是否要删除当前称？', function(b) {
+			parent.$.messager.confirm('询问', '您是否要删除当前采购计划单明细？', function(b) {
 				if (b) {
 					parent.$.messager.progress({
 						title : '提示',
 						text : '数据处理中，请稍后....'
 					});
-					dataGrid.datagrid('deleteRow',id);
+					let ids =[];
+					// 这里必须反过来循环，否则最后一条选中记录不能删除
+					for ( let i = rows.length-1; i >= 0 ; i--){
+						ids.push(rows[i].id);
+						let rowIndex = dataGrid.datagrid('getRowIndex',rows[i])
+						dataGrid.datagrid('deleteRow',rowIndex);
+					}
+
+					console.info(ids.join(','));
+
 					parent.$.messager.progress('close');
 				}
 			});
+		}else {
+			$.messager.alert('提示','请选择要删除的记录！','error')
 		}
 	}
 
 	function afterEdit(rowIndex, rowData, changes) {
-		var inserted = dataGrid.datagrid('getChanges', 'inserted');
-		var updated = dataGrid.datagrid('getChanges', 'updated');
+		let inserted = dataGrid.datagrid('getChanges', 'inserted');
+		let updated = dataGrid.datagrid('getChanges', 'updated');
 		var url = "";
-		var data = {};
-
+		let data = updated;
+		console.info(data);
+		dataGrid.datagrid('acceptChanges');
+		editrow = 'undefined'; //开关复位
 	}
 
+	function saveFun() {
+
+		dataGrid.datagrid('endEdit', editrow); //editrow 为本页面的局部变量
+	}
+
+	function addFun() {
+		if (editrow != 'undefined') {
+			dataGrid.datagrid('endEdit', editrow);
+		}
+		if (editrow == 'undefined') {
+			dataGrid.datagrid('insertRow', {
+				index : 0,
+				row : {}
+			});
+			dataGrid.datagrid('beginEdit', 0);
+			editrow = 0;
+		}
+	}
 
 </script>
 <body>
@@ -269,7 +295,10 @@
 					</tr>
 				</table>
 				<div style="text-align:right;padding:2px 0 2px;">
-					<a class="easyui-linkbutton" data-options="iconCls:'icon-add'" href="javascript:void(0)" onclick="javascript:alert('ok')" style="width:90px">新增一行</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-add'" href="javascript:void(0)" onclick="addFun()" style="width:90px">新增一行</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-save'" href="javascript:void(0)" onclick="saveFun();" style="width:90px">暂存</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-remove'" href="javascript:void(0)" onclick="deleteFun();" style="width:90px">删除选中</a>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-reload'" href="javascript:void(0)" onclick="dataGrid.datagrid('reload');" style="width:90px">刷新</a>
 				</div>
 			</form>
 		</div>
@@ -278,7 +307,7 @@
 		</div>
 		<div data-options="region:'south'" style="text-align:right;padding:5px 0 0;">
 			<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:alert('ok')" style="width:80px">Ok</a>
-			<a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:alert('cancel')" style="width:80px">Cancel</a>
+			<a class="easyui-linkbutton" data-options="iconCls:'transmit'" href="javascript:void(0)" onclick="javascript:alert('cancel')" style="width:80px">Cancel</a>
 		</div>
 	</div>
 </div>
