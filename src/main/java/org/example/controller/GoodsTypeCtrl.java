@@ -27,7 +27,7 @@ public class GoodsTypeCtrl {
     GoodsTypeService goodsTypeService;
 
     @RequestMapping("/getGoodsType")
-    public Page<GoodsType> getStudentInfo(Pageable page, GoodsType goodsType){
+    public Page<GoodsType> getGoodsTypeInfo(Pageable page, GoodsType goodsType,String q){
 
         return goodsTypeService.findPage(page,goodsType);
     }

@@ -38,4 +38,32 @@ public class PurchasePlanDetail implements Serializable {
     @JsonIgnore
     Goods goods;
 
+    @Transient
+    public Integer getGoodsPid(){
+        if (goods!=null)
+            return goods.getId();
+        else
+            return null;
+    }
+
+    @Transient
+    public String getGoodsName(){
+        if (goods!=null)
+            return goods.getSname();
+        else
+            return "";
+    }
+
+    @Transient
+    public String getGoodsTypeName(){
+        if (goods!=null) {
+            if (goods.getGoodsType() != null){
+                GoodsType type = goods.getGoodsType();
+                return type.getSname();
+            }
+            //return goods.getGoodType().getSname();
+        }
+        return "";
+    }
+
 }

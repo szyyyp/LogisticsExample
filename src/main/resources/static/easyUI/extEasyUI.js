@@ -438,8 +438,8 @@ $.extend($.fn.datagrid.defaults.editors, {
 $.extend($.fn.datagrid.defaults.editors, {    
 	combogrid: {    
         init: function(container, options){    
-            var editor = $('<input >').appendTo(container);    
-            options.editable=false;
+            var editor = $('<input id="comboGrid-editor">').appendTo(container);
+            options.editable=true;		//	false;
             editor.combogrid(options);
             return editor;    
         },    
@@ -456,7 +456,9 @@ $.extend($.fn.datagrid.defaults.editors, {
         	 $(target).combogrid('destroy');
         }
     }    
-});  
+});
+
+
 /**
  * @author 孙宇
  * 

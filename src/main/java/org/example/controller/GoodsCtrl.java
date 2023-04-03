@@ -24,7 +24,7 @@ public class GoodsCtrl {
     GoodsService goodsService;
 
     @RequestMapping("/getGoods")
-    public Page<Goods> getStudentInfo(Pageable page, Goods goods, Integer goodsTypePid, Integer yxqq, Integer yxqz,String start, String end ){
+    public Page<Goods> getGoodsInfo(Pageable page, Goods goods, Integer goodsTypePid, Integer yxqq, Integer yxqz,String start, String end ){
         page.setOrderProperty("createTime");
         page.setOrderDirection(Order.Direction.desc);
 

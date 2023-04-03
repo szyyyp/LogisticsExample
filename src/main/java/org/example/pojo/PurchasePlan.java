@@ -22,6 +22,9 @@ public class PurchasePlan extends BaseEntity implements Serializable {
     @Column(name = "dueDate")
     String dueDate;
 
+    @Column(name = "addition")
+    String addition;   //附加说明
+
     @OneToMany(mappedBy = "purchasePlan", fetch = FetchType.LAZY)
     @JsonIgnore
     Set<PurchasePlanDetail> purchasePlanDetailSet = new HashSet<PurchasePlanDetail>();

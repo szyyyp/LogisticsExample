@@ -100,6 +100,13 @@
                                     striped : true,// 隔行变色
                                     url: httphost + '/goodsType/getGoodsType',
                                     pageList : [15,30,50],
+                                    delay: 500,
+                                    keyHandler: $.extend($.fn.combo.defaults.keyHandler, {
+                                        query: function (q) {
+                                            $('#comboGrid-editor').combogrid('grid').datagrid('load', {sname: q});
+                                            $('#comboGrid-editor').combogrid('setValue',q);
+                                        }
+                                    }) ,
                                     columns:[[
                                         {field:'id',title:'ID'},
                                         {field:'sno',title:'类别编号',width : 60},
@@ -173,6 +180,8 @@
                         afterEdit(rowIndex, rowData, changes);
                     }
                 });
+        $('.datagrid-header div').css('textAlign','center');
+
         $('#goodsTypePid').combogrid({
             panelWidth:380,
             panelHeight:450,
@@ -187,6 +196,13 @@
             striped : true,// 隔行变色
             url: httphost + '/goodsType/getGoodsType',
             pageList : [15,30,50],
+            delay: 200,
+            keyHandler:  {
+                query: function (q) {
+                    $('#goodsTypePid').combogrid('grid').datagrid('load', {sname: q});
+                    $('#goodsTypePid').combogrid('setValue',q);
+                }
+            },
             columns:[[
                 {field:'id',title:'ID'},
                 {field:'sno',title:'类别编号',width : 60},
@@ -195,6 +211,7 @@
             ]],
         })
     });
+
 
     function afterEdit(rowIndex, rowData, changes) {
         var inserted = dataGrid.datagrid('getChanges', 'inserted');
@@ -245,7 +262,7 @@
                         title : '提示',
                         text : '数据处理中，请稍后....'
                     });
-                    $.post('/student/del', {
+                    $.post('/goods/del', {
                         id : rows[0].id
                     }, function(result) {
                         if (result.success) {

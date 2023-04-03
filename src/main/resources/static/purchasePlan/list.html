@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <title>采购计划单</title>
 </head>
-<link rel="stylesheet" type="text/css" href="easyUI/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="easyUI/themes/icon.css">
-<link rel="stylesheet" type="text/css" href="easyUI/themes/myicon.css">
-<link rel="stylesheet" type="text/css" href="easyUI/themes/color.css">
-<link rel="stylesheet" type="text/css" href="myCSS/demo.css">
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/myicon.css">
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/color.css">
+<link rel="stylesheet" type="text/css" href="../../myCSS/demo.css">
 
-<script type="text/javascript" src="easyUI/jquery.js"></script>
-<script type="text/javascript" src="easyUI/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="easyUI/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../easyUI/jquery.js"></script>
+<script type="text/javascript" src="../../easyUI/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../easyUI/locale/easyui-lang-zh_CN.js"></script>
 
-<script type="text/javascript" src="easyUI/extJquery.js"></script>
-<script type="text/javascript" src="easyUI/extEasyUI.js"></script>
-<script type="text/javascript" src="myJs/showMessage.js"></script>
+<script type="text/javascript" src="../../easyUI/extJquery.js"></script>
+<script type="text/javascript" src="../../easyUI/extEasyUI.js"></script>
+<script type="text/javascript" src="../../myJs/showMessage.js"></script>
 
 <script type="text/javascript">
     var dataGrid;
@@ -46,21 +46,33 @@
                     width : 140,
                     align: "center",
                     sortable : true,
-                },  {
-                    field : 'createby',
-                    title : '制单人',
-                    width : 110,
+                }, {
+                    field : 'warehouse',
+                    title : '仓库',
+                    width : 140,
                     align: "center",
                     sortable : true,
-                },{
-                    field : 'createTime',
-                    title : '制单日期',
-                    align : 'center',
-                    width : 160,
-                }  ] ],
+                },
+                    {
+                        field : 'createBy',
+                        title : '制单人',
+                        width : 110,
+                        align: "center",
+                        sortable : true,
+                    },{
+                        field : 'createTime',
+                        title : '制单日期',
+                        align : 'center',
+                        width : 160,
+                    }  ] ],
                 columns : [ [
                     {	field : 'dueDate',
                         title : '要求完成日期',
+                        width : 180,
+                        sortable : true,
+                        align : "center",
+                    },{	field : 'addition',
+                        title : '备注',
                         width : 180,
                         sortable : true,
                         align : "center",
@@ -75,10 +87,10 @@
                                 .formatString(
                                     '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
                                     row.id,
-                                    'easyUI/themes/extjs_icons/pencil.png');
+                                    '../../easyUI/themes/extjs_icons/pencil.png');
                             //注销删除按钮
                             str += '&nbsp;&nbsp;';
-                            str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, 'easyUI/themes/extjs_icons/cancel.png');
+                            str += $.formatString('<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>', row.id, '../../easyUI/themes/extjs_icons/cancel.png');
 
                             return str;
                         }
@@ -97,6 +109,7 @@
             textField:'canID',
             url: httphost + '/realWeight/getMeters'
         })
+        $('.datagrid-header div').css('textAlign','center');
     });
 
     // 查询
@@ -163,11 +176,15 @@
      * @param id    计划单的 数据库 id
      */
     function editFun(id) {
-
+        url='edit.html';
+        param={"id":id};
+        open_page(url,param);
     }
 
     function addPlans(){
-
+        url='edit.html';
+        param={"id":'-1'};
+        open_page(url,param);
     }
 
 </script>
