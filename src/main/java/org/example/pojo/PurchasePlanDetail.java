@@ -1,7 +1,9 @@
 package org.example.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +16,8 @@ import java.io.Serializable;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_PurchasePlanDetail")
 public class PurchasePlanDetail implements Serializable {
 
@@ -47,6 +51,14 @@ public class PurchasePlanDetail implements Serializable {
     }
 
     @Transient
+    public Integer purchasePlanPid(){
+        if (purchasePlan!=null)
+            return purchasePlan.getId();
+        else
+            return null;
+    }
+
+    @Transient
     public String getGoodsName(){
         if (goods!=null)
             return goods.getSname();
@@ -65,5 +77,7 @@ public class PurchasePlanDetail implements Serializable {
         }
         return "";
     }
+
+
 
 }

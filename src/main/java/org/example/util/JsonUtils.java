@@ -1,5 +1,8 @@
 package org.example.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
@@ -9,6 +12,9 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utils - JSON
@@ -120,5 +126,27 @@ public final class JsonUtils {
 			e.printStackTrace();
 		}
 	}
+
+	//UrlsBean是包含name，url属性的目标实体类，
+	// "urls": "[{name:'',url:''},{name:'',url:''},{name:'',url:''}]",
+	public static  <T> List<T> getListBeans(String json,Class<T> tClass) {
+		if (json.isEmpty()) return null;
+		List<T> lstBeans = new ArrayList<>();
+		try {
+			JSONArray jsonArray = JSON.parseArray(json);
+			for (Object o : jsonArray) {
+				JSONObject jsonObject = (JSONObject) o;
+				T t =(T)JSON.toJavaObject(jsonObject , tClass);
+				lstBeans.add(t);
+			}
+			return lstBeans;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
 
 }

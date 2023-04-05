@@ -1,6 +1,6 @@
 /**
  * Create a cookie with the given key and value and other optional parameters.
- * 
+ *
  * @example $.cookie('the_cookie', 'the_value');
  * @desc Set the value of a cookie.
  * @example $.cookie('the_cookie', 'the_value', { expires: 7, path: '/', domain: 'jquery.com', secure: true });
@@ -9,7 +9,7 @@
  * @desc Create a session cookie.
  * @example $.cookie('the_cookie', null);
  * @desc Delete a cookie by passing null as value. Keep in mind that you have to use the same path and domain used when the cookie was set.
- * 
+ *
  * @param String
  *            key The key of the cookie.
  * @param String
@@ -21,21 +21,21 @@
  * @option String domain The value of the domain attribute of the cookie (default: domain of page that created the cookie).
  * @option Boolean secure If true, the secure attribute of the cookie will be set and the cookie transmission will require a secure protocol (like HTTPS).
  * @type undefined
- * 
+ *
  * @name $.cookie
  * @cat Plugins/Cookie
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
- * 
+ *
  * Get the value of a cookie with the given key.
- * 
+ *
  * @example $.cookie('the_cookie');
  * @desc Get the value of a cookie.
- * 
+ *
  * @param String
  *            key The key of the cookie.
  * @return The value of the cookie.
  * @type String
- * 
+ *
  * @name $.cookie
  * @cat Plugins/Cookie
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
@@ -61,11 +61,11 @@ $.cookie = function(key, value, options) {
 
 /**
  * @author 孙宇
- * 
+ *
  * @requires jQuery
- * 
+ *
  * 将form表单元素的值序列化成对象
- * 
+ *
  * @returns object
  */
 $.serializeObject = function(form) {
@@ -82,11 +82,11 @@ $.serializeObject = function(form) {
 
 /**
  * @author 孙宇
- * 
+ *
  * 增加formatString功能
- * 
+ *
  * 使用方法：$.formatString('字符串{0}字符串{1}字符串','第一个变量','第二个变量');
- * 
+ *
  * @returns 格式化后的字符串
  */
 $.formatString = function(str) {
@@ -98,9 +98,9 @@ $.formatString = function(str) {
 
 /**
  * @author 孙宇
- * 
+ *
  * 接收一个以逗号分割的字符串，返回List，list里每一项都是一个字符串
- * 
+ *
  * @returns list
  */
 $.stringToList = function(value) {
@@ -118,9 +118,9 @@ $.stringToList = function(value) {
 
 /**
  * @author 孙宇
- * 
+ *
  * @requires jQuery
- * 
+ *
  * 改变jQuery的AJAX默认属性和方法
  */
 $.ajaxSetup({
@@ -128,7 +128,20 @@ $.ajaxSetup({
 	error : function(XMLHttpRequest, textStatus, errorThrown) {
 		try {
 			parent.$.messager.progress('close');
-			parent.$.messager.alert('错误', XMLHttpRequest.responseText);
+			parent.$.messager.show({
+				title:'错误',
+				msg:XMLHttpRequest.responseText,
+				timeout:5000,
+				width:1200,
+				height:700,
+				showType:'slide',
+				/*style:{
+					right:'',
+					top:document.body.scrollTop+document.documentElement.scrollTop,
+					bottom:''
+				}*/
+			});
+			//parent.$.messager.alert('错误', XMLHttpRequest.responseText);
 		} catch (e) {
 			alert(XMLHttpRequest.responseText);
 		}
@@ -137,9 +150,9 @@ $.ajaxSetup({
 
 /**
  * @author 孙宇
- * 
+ *
  * 去字符串空格
- * 
+ *
  * @returns
  */
 String.prototype.trim = function() {

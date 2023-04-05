@@ -1,16 +1,12 @@
 package org.example.controller;
 
-import org.example.pageModel.Filter;
-import org.example.pageModel.Order;
-import org.example.pageModel.Page;
-import org.example.pageModel.Pageable;
+import org.example.pageModel.*;
 import org.example.pojo.PurchasePlan;
 import org.example.pojo.PurchasePlanDetail;
 import org.example.service.PurchasePlanDetailService;
 import org.example.service.PurchasePlanService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.util.JsonUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -77,6 +73,31 @@ public class PurchasePlanCtrl {
             return purchasePlanDetailService.findPage(page);
         }else
             return null;
+    }
+
+    @RequestMapping("/edit")
+    public Json edit(PurchasePlan purchasePlan,
+                     @RequestParam(value = "inserted", required = false) String inserted,
+                     @RequestParam(value = "updated", required = false) String updated,
+                     @RequestParam(value = "deleted", required = false) String deleted
+                     ){
+        Json json = new Json();
+        List<PurchasePlanDetailDto> lstInserted = new ArrayList<>();
+        List<PurchasePlanDetailDto> lstUpdated = new ArrayList<>();
+        List<PurchasePlanDetailDto> lstDeleted = new ArrayList<>();
+
+
+        if (!inserted.isEmpty()){
+             lstInserted = JsonUtils.getListBeans(inserted, PurchasePlanDetailDto.class);
+        }
+        if (!updated.isEmpty()){
+            lstUpdated = JsonUtils.getListBeans(updated, PurchasePlanDetailDto.class);
+        }
+        if (!deleted.isEmpty()){
+            lstDeleted = JsonUtils.getListBeans(deleted, PurchasePlanDetailDto.class);
+        }
+
+        return  json;
     }
 
 }
