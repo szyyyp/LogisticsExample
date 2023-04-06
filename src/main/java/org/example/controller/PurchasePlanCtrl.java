@@ -6,6 +6,7 @@ import org.example.pojo.PurchasePlanDetail;
 import org.example.service.PurchasePlanDetailService;
 import org.example.service.PurchasePlanService;
 import org.example.util.JsonUtils;
+import org.example.webSocket.WebSocketUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -97,6 +98,8 @@ public class PurchasePlanCtrl {
             lstDeleted = JsonUtils.getListBeans(deleted, PurchasePlanDetailDto.class);
         }
 
+
+        WebSocketUtil.sendPurchasePlanStringMsg(WebSocketUtil.generateMsg(null,0));
         return  json;
     }
 

@@ -20,6 +20,9 @@
 
 <script type="text/javascript">
     var dataGrid;
+    let socketUrl ="ws:" + host + "/websocket/purchasePlan";
+    openSocket();
+
     $(function() {
         editrow = 'undefined'; //行编辑开关
         dataGrid = $('#dataGrid')
@@ -185,6 +188,36 @@
         url='edit.html';
         param={"id":'-1'};
         open_page(url,param);
+    }
+
+    function openSocket(flag) {
+
+        if (socket != null) {
+            socket.close();
+            socket = null;
+        }
+        socket = new WebSocket(socketUrl);
+        //打开事件
+        socket.onopen = function () {
+            //获得消息事件
+            socket.onmessage = function (msg) {
+                try {
+                    //console.info(msg);
+                    let item = JSON.parse(msg.data); //可以将json字符串转换成json对象
+                    // console.info(item);
+                    if (item.msgType==0){ //	采购计划单有变化
+                        dataGrid.datagrid('reload');    //更新列表
+
+                    }
+                }catch (e){
+                    console.log("捕获到异常： ", e);
+                }
+            };
+            //发生了错误事件
+            socket.onerror = function () {
+                alert("websocket发生了错误");
+            }
+        }
     }
 
 </script>
