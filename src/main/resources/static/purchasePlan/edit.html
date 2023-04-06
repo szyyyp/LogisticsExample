@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>采购计划单</title>
+	<title>采购计划单 -- 修改</title>
 </head>
 <link rel="stylesheet" type="text/css" href="/easyUI/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="/easyUI/themes/icon.css">
@@ -119,7 +119,7 @@
 							width : 140,
 							align: "center",
 							hidden: true,
-							sortable : true,
+							//sortable : true,
 							editor: {
 								type: 'text',
 							}
@@ -203,7 +203,7 @@
 					$('#sno').val(result.sno);
 					$('#warehouse').val(result.warehouse);
 					$('#createBy').val(result.createBy);
-					$('#dueDate').val(result.dueDate);
+					$('#dueDate').datebox('setValue',result.dueDate);
 					$('#w').window({title:"采购计划单： -- &nbsp;&nbsp; 修改"}) ;
 				}
 			});
@@ -311,7 +311,7 @@
 						'sno' : $('#sno').val(),
 						'warehouse' : $('#warehouse').val(),
 						'createBy' : $('#createBy').val(),
-						'dueDate' : $('#dueDate').val(),
+						'dueDate' : $('#dueDate').datebox('getValue'),
 						'inserted': JSON.stringify(inserted),
 						'updated' : JSON.stringify(updated),
 						'deleted' : JSON.stringify(deleted),
@@ -378,7 +378,7 @@
 					<tr><td>采购计划单号：</td><td><input id="sno" name="sno" ></td><td>仓库：</td><td><input id="warehouse" name="warehouse" ></td>
 						<td>制单人</td><td><input id="createBy" name="createBy" ></td>
 					</tr>
-					<tr><td>要求终完成日期：</td><td><input id="dueDate" name="dueDate" ></td>
+					<tr><td>要求终完成日期：</td><td><input id="dueDate" name="dueDate" class="easyui-datebox" ></td>
 					</tr>
 				</table>
 				<div style="text-align:right;padding:2px 0 2px;">

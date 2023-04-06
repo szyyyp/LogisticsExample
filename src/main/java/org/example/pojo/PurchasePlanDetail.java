@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *  订单明细表
  *  作者：szy
  *  日期：  2023-3-27
  */
-
 @Data
 @Entity
 @NoArgsConstructor
@@ -78,6 +78,16 @@ public class PurchasePlanDetail implements Serializable {
         return "";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PurchasePlanDetail)) return false;
+        PurchasePlanDetail that = (PurchasePlanDetail) o;
+        return Objects.equals(id, that.id) && Objects.equals(num, that.num) && Objects.equals(price, that.price) && Objects.equals(goods, that.goods);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, num, price, goods);
+    }
 }

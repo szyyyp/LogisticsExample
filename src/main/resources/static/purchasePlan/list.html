@@ -19,7 +19,8 @@
 <script type="text/javascript" src="../../myJs/showMessage.js"></script>
 
 <script type="text/javascript">
-    var dataGrid;
+    let dataGrid;
+    let socket;
     let socketUrl ="ws:" + host + "/websocket/purchasePlanSocket";
     openSocket();
 
@@ -79,11 +80,16 @@
                         width : 180,
                         sortable : true,
                         align : "center",
+                    },{	field : 'updateTime',
+                        title : '修改日期',
+                        width : 80,
+                        sortable : true,
+                        align : "center",
                     },
                     {
                         field : 'actor',
                         title : '操作',
-                        width : 170,
+                        width : 70,
                         formatter : function(value, row, index) {
                             var str = '';
                             str += $
@@ -185,7 +191,7 @@
     }
 
     function addPlans(){
-        url='edit.html';
+        url='add.html';
         param={"id":'-1'};
         open_page(url,param);
     }

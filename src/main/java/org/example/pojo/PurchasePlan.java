@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -25,8 +26,21 @@ public class PurchasePlan extends BaseEntity implements Serializable {
     @Column(name = "addition")
     String addition;   //附加说明
 
-    @OneToMany(mappedBy = "purchasePlan", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "purchasePlan", fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JsonIgnore
     Set<PurchasePlanDetail> purchasePlanDetailSet = new HashSet<PurchasePlanDetail>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PurchasePlan)) return false;
+        if (!super.equals(o)) return false;
+        PurchasePlan that = (PurchasePlan) o;
+        return Objects.equals(warehouse, that.warehouse) && Objects.equals(dueDate, that.dueDate) && Objects.equals(addition, that.addition) && Objects.equals(purchasePlanDetailSet, that.purchasePlanDetailSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), warehouse, dueDate, addition);
+    }
 }

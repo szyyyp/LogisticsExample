@@ -20,6 +20,8 @@ public class Json implements java.io.Serializable {
 
 	private String msg = "";
 
+	private Integer id;
+
 	private Object obj = null;
 
 	public boolean isSuccess() {
@@ -46,4 +48,11 @@ public class Json implements java.io.Serializable {
 		this.obj = obj;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }
