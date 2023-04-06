@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * 采购计划单 有变化后，给list页面发送消息
  * realWeight and realState
  */
-@ServerEndpoint("/websocket/purchasePlan")
+@ServerEndpoint("/websocket/purchasePlanSocket")
 @Component
 public class PurchasePlanWebSocket {
     static CopyOnWriteArraySet<PurchasePlanWebSocket> webSocket = new CopyOnWriteArraySet<>();

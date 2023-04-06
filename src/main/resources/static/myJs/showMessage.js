@@ -42,4 +42,6 @@ function open_page(url, param) {
 var host = "localhost:8888";
 var httphost = "http://localhost:8888";
 
+var wshost = "ws:localhost:8888";
+// var wshost = "ws:192.168.200.53:8888";
 
