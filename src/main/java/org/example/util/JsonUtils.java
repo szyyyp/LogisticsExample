@@ -3,16 +3,13 @@ package org.example.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,10 +115,6 @@ public final class JsonUtils {
 	public static void writeValue(Writer writer, Object value) {
 		try {
 			mapper.writeValue(writer, value);
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -136,7 +129,7 @@ public final class JsonUtils {
 			JSONArray jsonArray = JSON.parseArray(json);
 			for (Object o : jsonArray) {
 				JSONObject jsonObject = (JSONObject) o;
-				T t =(T)JSON.toJavaObject(jsonObject , tClass);
+				T t = JSON.toJavaObject(jsonObject , tClass);
 				lstBeans.add(t);
 			}
 			return lstBeans;

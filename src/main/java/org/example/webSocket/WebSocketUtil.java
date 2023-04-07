@@ -29,7 +29,6 @@ public class WebSocketUtil {
 
     /**
      *  send Real data  message
-     * @param message
      */
     public static void sendPurchasePlanStringMsg(String message ) {
         CopyOnWriteArraySet<PurchasePlanWebSocket> webSocketSet = PurchasePlanWebSocket.getWebSocket();

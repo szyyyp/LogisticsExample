@@ -17,8 +17,8 @@ import java.util.List;
 
 /**
     仪表参数设置及相关管理
-    @Author szy
-    @Date  2022-6-28
+    作者 szy
+    日期  2022-6-28
  */
 @RestController
 @RequestMapping("/meter")

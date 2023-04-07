@@ -4,7 +4,6 @@ import org.example.pageModel.Json;
 import org.example.pageModel.Page;
 import org.example.pageModel.Pageable;
 import org.example.pojo.Student;
-import org.example.pojo.device.Scale;
 import org.example.service.StudentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;

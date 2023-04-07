@@ -21,12 +21,10 @@ public class CourseServiceImpl extends BaseServiceImpl<Course, Integer> implemen
     /**
      *
      * @param course    前端传来的对象，非数据库中的带关联的对象
-     * @param cpno
-     * @return
      */
-    public boolean edit(Course course, Integer cpno){
+    public boolean edit(Course course, Integer cpNo){
         try {
-            Course co = this.find(cpno);    // 先行课
+            Course co = this.find(cpNo);    // 先行课
             Course courseIn = this.find(course.getId());    // 数据库中已经保存了的课程对象
             BeanUtils.copyProperties(course,courseIn,"course");
             courseIn.setCourse(co);

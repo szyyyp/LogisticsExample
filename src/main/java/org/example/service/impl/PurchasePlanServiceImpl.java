@@ -57,7 +57,7 @@ public class PurchasePlanServiceImpl extends BaseServiceImpl<PurchasePlan, Integ
                 purchasePlanDetail.setPurchasePlan(pur_plan_in_dataBase);
                 Goods goods = goodsDao.find(d.getGoodsPid());
                 purchasePlanDetail.setGoods(goods);
-                BeanUtils.copyProperties(d,purchasePlanDetail,  new String[]{"purchasePlanPid","goodsPid"});
+                BeanUtils.copyProperties(d,purchasePlanDetail, "purchasePlanPid","goodsPid");
                 purchasePlanDetailDao.persist(purchasePlanDetail);
             }
 
@@ -69,7 +69,7 @@ public class PurchasePlanServiceImpl extends BaseServiceImpl<PurchasePlan, Integ
                 PurchasePlanDetail purchasePlanDetail = purchasePlanDetailDao.find(d.getId());
                 Goods goods = goodsDao.find(d.getGoodsPid());
                 purchasePlanDetail.setGoods(goods);
-                BeanUtils.copyProperties(d,purchasePlanDetail,  new String[]{"purchasePlanPid","goodsPid"});
+                BeanUtils.copyProperties(d,purchasePlanDetail, "purchasePlanPid","goodsPid");
                 purchasePlanDetailDao.persist(purchasePlanDetail);
             }
         }
@@ -81,14 +81,14 @@ public class PurchasePlanServiceImpl extends BaseServiceImpl<PurchasePlan, Integ
         //更新表头
         purchasePlan.setId(null);
 
-        Set<PurchasePlanDetail> purchasePlanDetailSet = new HashSet<PurchasePlanDetail>();
+        Set<PurchasePlanDetail> purchasePlanDetailSet = new HashSet<>();
         if (lstInserted.size() > 0){
             for (PurchasePlanDetailDto d : lstInserted) {
                 PurchasePlanDetail purchasePlanDetail = new PurchasePlanDetail();
                 Goods goods = goodsDao.find(d.getGoodsPid());
                 purchasePlanDetail.setGoods(goods);
                 purchasePlanDetail.setPurchasePlan(purchasePlan);
-                BeanUtils.copyProperties(d, purchasePlanDetail, new String[]{"purchasePlanPid", "goodsPid"});
+                BeanUtils.copyProperties(d, purchasePlanDetail, "purchasePlanPid", "goodsPid");
                 purchasePlanDetailSet.add(purchasePlanDetail);
             }
         }

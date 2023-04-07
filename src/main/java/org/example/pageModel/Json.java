@@ -3,11 +3,9 @@ package org.example.pageModel;
 /**
  * 
  * JSON模型
- * 
  * 用户后台向前台返回的JSON对象
- * 
- * @author szy
- * @date 2012-4-24
+ * 作者： szy
+ * 日期： 2012-4-24
  */
 public class Json implements java.io.Serializable {
 

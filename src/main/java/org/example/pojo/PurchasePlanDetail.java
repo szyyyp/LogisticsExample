@@ -73,7 +73,6 @@ public class PurchasePlanDetail implements Serializable {
                 GoodsType type = goods.getGoodsType();
                 return type.getSname();
             }
-            //return goods.getGoodType().getSname();
         }
         return "";
     }

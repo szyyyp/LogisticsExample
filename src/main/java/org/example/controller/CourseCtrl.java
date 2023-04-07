@@ -4,9 +4,7 @@ import org.example.pageModel.Json;
 import org.example.pageModel.Page;
 import org.example.pageModel.Pageable;
 import org.example.pojo.Course;
-import org.example.pojo.Student;
 import org.example.service.CourseService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

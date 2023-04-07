@@ -9,9 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 /**
- * @Author: Szy
- * @Name: PurchasePlanDetailServiceImpl
- * @Date: 2023/3/30  23:55
+ * 作者： Szy
+ * 日期: 2023/3/30  23:55
  */
 @Service
 @Transactional

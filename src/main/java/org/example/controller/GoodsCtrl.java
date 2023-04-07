@@ -12,8 +12,8 @@ import java.util.List;
 
 /**
  商品参数设置及相关管理
- @Author szy
- @Date  2023-3-28
+ 作者 szy
+ 日期  2023-3-28
  */
 
 @RestController
@@ -28,22 +28,9 @@ public class GoodsCtrl {
         page.setOrderProperty("createTime");
         page.setOrderDirection(Order.Direction.desc);
 
-        List<Filter> filters = new ArrayList<Filter>();
+        List<Filter> filters = new ArrayList<>();
 
-        if (start!=null && start.trim().length()>0){
-            Filter ft = new Filter();
-            ft.setProperty("createTime");
-            ft.setValue(start);
-            ft.setOperator(Filter.Operator.ge);
-            filters.add(ft);
-        }
-        if (end!=null && end.trim().length()>0){
-            Filter ft = new Filter();
-            ft.setProperty("createTime");
-            ft.setValue(end);
-            ft.setOperator(Filter.Operator.le);
-            filters.add(ft);
-        }
+        PurchasePlanCtrl.addStartAndEndRestrict(start, end, filters);
         if (yxqq!=null ){
             Filter ft = new Filter();
             ft.setProperty("lifespan");

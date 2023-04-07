@@ -30,7 +30,7 @@ public class CanMeterServiceImpl extends BaseServiceImpl<CanMeter,Integer> imple
             CanMeter can = canMeterDao.find(meter.getId());     //找出原来的对象
             Scale scale = scaleDao.find(scaleId);
             if (can!=null ) {
-                if ((can.getScale() != null && can.getScale().getId() != scaleId) || can.getScale() == null) {
+                if (can.getScale() == null || !can.getScale().getId().equals(scaleId)) {
                     can.setScale(scale);
                 }
                 BeanUtils.copyProperties(meter, can, "scale");    //把页面传来的值，拷贝回原来的对象

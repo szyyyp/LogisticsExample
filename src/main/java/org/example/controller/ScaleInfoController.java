@@ -4,7 +4,6 @@ import org.example.pageModel.Json;
 import org.example.pageModel.Page;
 import org.example.pageModel.Pageable;
 import org.example.pojo.device.Scale;
-import org.example.service.device.CanMeterService;
 import org.example.service.device.ScaleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +13,8 @@ import javax.annotation.Resource;
 
 /**
     称台参数设置及相关管理
-    @Author szy
-    @Date  2022-6-28
+    作者： szy
+    日期：  2022-6-28
  */
 @RestController
 @RequestMapping("/scale")
@@ -23,8 +22,8 @@ public class ScaleInfoController {
     @Resource(name="scaleServiceImpl")
     ScaleService scaleService;
 
-    @Resource(name="canMeterServiceImpl")
-    CanMeterService canMeterService;
+/*    @Resource(name="canMeterServiceImpl")
+    CanMeterService canMeterService;*/
 
     // 获取称台参数
     @RequestMapping("/getScaleInfo")

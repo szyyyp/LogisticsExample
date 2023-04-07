@@ -197,7 +197,7 @@
             url: httphost + '/goodsType/getGoodsType',
             pageList : [15,30,50],
             delay: 200,
-            keyHandler:  {
+            keyHandler:  {      // 控件按键向后台请求数据
                 query: function (q) {
                     $('#goodsTypePid').combogrid('grid').datagrid('load', {sname: q});
                     $('#goodsTypePid').combogrid('setValue',q);

@@ -17,7 +17,7 @@ public class SysUtil {
     }
 
     public static  String getPath(String Path) {
-        StringBuffer sf = new StringBuffer(Path); //
+        StringBuilder sf = new StringBuilder(Path); //
 
         if(isWin()){
             if (!Path.endsWith("\\")) {
@@ -40,9 +40,7 @@ public class SysUtil {
 
     private static boolean isWin() {
         String OS = System.getProperty("os.name").toLowerCase();
-        if(OS.indexOf("windows")>-1)
-            return true;
-        else return false;
+        return OS.contains("windows");
     }
 
     public static boolean createDir(String DirName) {

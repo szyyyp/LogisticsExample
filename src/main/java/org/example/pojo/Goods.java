@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *  商品目录表
@@ -49,4 +50,20 @@ public class Goods extends BaseEntity implements Serializable {
         else
             return null;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Goods)) return false;
+        if (!super.equals(o)) return false;
+        Goods goods = (Goods) o;
+        return Objects.equals(sname, goods.sname) && Objects.equals(manufacturer, goods.manufacturer) && Objects.equals(lifespan, goods.lifespan) && Objects.equals(addition, goods.addition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), sname, manufacturer, lifespan, addition);
+    }
+
+
 }

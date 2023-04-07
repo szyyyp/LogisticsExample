@@ -51,7 +51,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public List<T> findList(ID... ids) {
-		List<T> result = new ArrayList<T>();
+		List<T> result = new ArrayList<>();
 		if (ids != null) {
 			for (ID id : ids) {
 				T entity = find(id);
@@ -116,7 +116,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 		}
 		T persistant = baseDao.find(baseDao.getIdentifier(entity));
 		if (persistant != null) {
-			copyProperties(entity, persistant, (String[]) ArrayUtils.addAll(ignoreProperties, UPDATE_IGNORE_PROPERTIES));
+			copyProperties(entity, persistant,  ArrayUtils.addAll(ignoreProperties, UPDATE_IGNORE_PROPERTIES));
 			return update(persistant);
 		} else {
 			return update(entity);
@@ -161,7 +161,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 						}
 						Object sourceValue = readMethod.invoke(source);
 						Object targetValue = readMethod.invoke(target);
-						if (sourceValue != null && targetValue != null && targetValue instanceof Collection) {
+						if (sourceValue != null && targetValue instanceof Collection) {
 							Collection collection = (Collection) targetValue;
 							collection.clear();
 							collection.addAll((Collection) sourceValue);
@@ -190,7 +190,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	}
 	@Override
 	public boolean existUserName(String username) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		String jpql = "select username from v_user where username=:username" ;
 		params.put("username", username);	// 设置查询条件
 		if (baseDao.findBysql(jpql, params) != null)
@@ -200,15 +200,14 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	}
 	
 	public String userRole(String username){
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		String jpql = "select role from v_user where username=:username" ;
 		params.put("username", username);	// 设置查询条件
 		if (baseDao.findBysql(jpql, params) != null){
 			@SuppressWarnings("rawtypes")
 			List lst = baseDao.findBysql(jpql, params);
 			if (lst.get(0)!=null){
-				String role = (String)lst.get(0);
-				return role;
+				return (String)lst.get(0);
 			}
 		}
 		return null;

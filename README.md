@@ -23,3 +23,13 @@
     
 三、OneToMany（一对多）或者多对一（ManyToOne）的实体的ToString函数
     由于有级联，在建立联系的两个对的ToString()中，必须至少有一个的ToString()中去掉有关关联对象的输出
+
+四、当我们的pojo使用@Data注解时，@Data默认包含的是：@EqualsAndHashCode(callSuper = false)，但是我们的pojo有继承父类，
+我们可能需要重新定义这个注解为：@EqualsAndHashCode(callSuper = true)
+
+两者区别：
+@EqualsAndHashCode(callSuper = false)：当我们用于对象属性比较的时候：只比较子类的属性，也就是讲：如果两个对象子类属性一致，
+父类属性不一致，在比较时候出现相同的结果，也就是返回的true。
+
+@EqualsAndHashCode(callSuper = true)：如果加了这个注解，则相反，进行对象属性比较时，子类和父类一同进行比较，也就是：如果两个对象子类属性一致，
+父类不一致，返回的是false；只有子类和继承类的属性都一致时，才会返回true

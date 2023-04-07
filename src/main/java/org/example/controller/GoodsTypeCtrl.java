@@ -4,7 +4,6 @@ import org.example.pageModel.Json;
 import org.example.pageModel.Page;
 import org.example.pageModel.Pageable;
 import org.example.pojo.GoodsType;
-import org.example.pojo.Student;
 import org.example.service.GoodsTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +13,8 @@ import javax.annotation.Resource;
 
 /**
  * 商品类别维护
- * @Author: Szy
- * @Name: GoodsTypeCtrl
- * @Date: 2023/3/28  6:53
+ * 作者: Szy
+ * 日期: 2023/3/28  6:53
  */
 
 @RestController
@@ -27,7 +25,7 @@ public class GoodsTypeCtrl {
     GoodsTypeService goodsTypeService;
 
     @RequestMapping("/getGoodsType")
-    public Page<GoodsType> getGoodsTypeInfo(Pageable page, GoodsType goodsType,String q){
+    public Page<GoodsType> getGoodsTypeInfo(Pageable page, GoodsType goodsType){
 
         return goodsTypeService.findPage(page,goodsType);
     }

@@ -28,7 +28,7 @@ public class PurchasePlan extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "purchasePlan", fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JsonIgnore
-    Set<PurchasePlanDetail> purchasePlanDetailSet = new HashSet<PurchasePlanDetail>();
+    Set<PurchasePlanDetail> purchasePlanDetailSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
