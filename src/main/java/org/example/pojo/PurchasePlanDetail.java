@@ -82,12 +82,21 @@ public class PurchasePlanDetail implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PurchasePlanDetail)) return false;
-        PurchasePlanDetail that = (PurchasePlanDetail) o;
-        return Objects.equals(id, that.id) && Objects.equals(num, that.num) && Objects.equals(price, that.price) && Objects.equals(goods, that.goods);
+        return id != null && id.equals(((PurchasePlan) o).id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, num, price, goods);
+    }
+
+    @Override
+    public String toString() {
+        return "PurchasePlanDetail{" +
+                "id=" + id +
+                ", num=" + num +
+                ", price=" + price +
+                ", goods=" + goods +
+                '}';
     }
 }

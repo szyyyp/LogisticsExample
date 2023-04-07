@@ -36,7 +36,7 @@ public class PurchasePlan extends BaseEntity implements Serializable {
         if (!(o instanceof PurchasePlan)) return false;
         if (!super.equals(o)) return false;
         PurchasePlan that = (PurchasePlan) o;
-        return Objects.equals(warehouse, that.warehouse) && Objects.equals(dueDate, that.dueDate) && Objects.equals(addition, that.addition) && Objects.equals(purchasePlanDetailSet, that.purchasePlanDetailSet);
+        return Objects.equals(warehouse, that.warehouse) && Objects.equals(dueDate, that.dueDate) && Objects.equals(addition, that.addition);
     }
 
     @Override
