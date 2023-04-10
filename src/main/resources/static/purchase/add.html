@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>采购单 -- 新增</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/myicon.css">
+<link rel="stylesheet" type="text/css" href="../../easyUI/themes/color.css">
+<link rel="stylesheet" type="text/css" href="../../myCSS/demo.css">
+
+<script type="text/javascript" src="../../easyUI/jquery.js"></script>
+<script type="text/javascript" src="../../easyUI/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../easyUI/locale/easyui-lang-zh_CN.js"></script>
+
+<script type="text/javascript" src="../../easyUI/extJquery.js"></script>
+<script type="text/javascript" src="../../easyUI/extEasyUI.js"></script>
+<script type="text/javascript" src="../../easyUI/datagrid-groupview.js"></script>
+<script type="text/javascript" src="../../myJs/showMessage.js"></script>
+
+<style>
+  .datagrid-header .datagrid-cell {
+    height: auto;
+    text-align: center;
+  }
+  .datagrid-header-row .datagrid-cell span {
+    white-space: normal !important;
+    word-wrap: normal !important;
+  }
+  #span{
+    float:right;
+    font-weight: bolder;
+    font-family: 'Microsoft YaHei, 微软雅黑';
+    font-size: 16px;
+    color: blue;
+  }
+</style>
+
+<script type="text/javascript">
+  let url=location.search;
+  let Request = new Object();
+  let id ;	// 订单ID
+  if (url.indexOf("?") != -1) {
+    var str = url.substr(1)　//去掉?号
+    strs = str.split("&");
+    for (var i = 0; i < strs.length; i++) {
+      Request[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+    }
+    id = Request["id"];
+  }
+
+  let editrow = 'undefined';
+  let dataGrid;
+
+  function insertARow(index, data) {
+    //let purchaseDetails = dataGrid.datagrid('getData').rows;
+    //console.info(data);
+    dataGrid.datagrid('insertRow',
+            {index:0,
+              row:{'purchasePlanSno': data.purchasePlanSno,
+                'purchasePlanPid': data.purchasePlanPid,
+                'goodsTypeName': data.goodsTypeName,
+                'goodsName': data.goodsName,
+                'purchasePlanDetailPid': data.id,
+                'purchasePlanDetailNum': data.num,
+                'purchasePlanDetailAlreadyNum':data.alreadyNum,
+                'purchasePlanDetailPrice': data.price}
+            });
+    //console.info(dataGrid.datagrid('getData').rows);
+  }
+
+  $(function() {
+    // 注册dataGrid
+    dataGrid = $('#dg_purchaseDetail')
+            .datagrid({
+              url : httphost + '/purchase/getPurchaseDetails/' + id,
+              pagination : true,
+              fitColumns : true,
+              fit : true,
+              rownumbers : true,
+              //singleSelect : true,
+              border : false,
+              striped : true,
+              idField : 'id',
+              pageList : [10,20,50,100,200 ],
+              groupField: 'purchasePlanPid',
+              view: groupview,
+              groupFormatter:function(value, rows){
+                //console.info(rows)
+                return "采购计划单号=：" + rows[0].purchasePlanSno + ' -- 共：' + rows.length + " 条待采购明细";
+              },
+              frozenColumns : [ [
+                {
+                  field : 'id',
+                  title : 'ID',
+                  align : 'center',
+                  checkbox: true,
+                  width : 80,
+                }, {
+                  field : 'purchasePid',
+                  title : 'purchasePid',
+                  align : 'center',
+                  hidden: true,
+                  width : 80,
+                },
+                {
+                  field : 'purchasePlanPid',
+                  title : '采购计划单号',
+                  width : 140,
+                  align: "center",
+                  hidden: true,
+                }, {
+                  field : 'purchasePlanSno',
+                  title : '采购计划单号',
+                  align: "center",
+                  width : 100,
+                },
+                {
+                  field : 'goodsName',
+                  title : '商品名称',
+                  width : 100,
+                  align: "center",
+                },
+                {
+                  field : 'goodsTypeName',
+                  title : '商品类别',
+                  width : 80,
+                  align: "center",
+                  sortable : true,
+                },
+              ] ],
+              columns : [ [
+                {
+                  field : 'purchasePlanDetailNum',
+                  title : '计划采购数量',
+                  width : 80,
+                  align: "center",
+                  sortable : true,
+                },{
+                  field : 'purchasePlanDetailPrice',
+                  title : '计划采购价格',
+                  align : 'center',
+                  width : 80,
+                } ,
+                {
+                  field : 'purchasePlanDetailAlreadyNum',
+                  title : '已采购数量',
+                  align : 'center',
+                  width : 80,
+                } ,
+                {
+                  field : 'num',
+                  title : '本次采购数量',
+                  align : 'center',
+                  width : 80,
+                  editor : {
+                    type : 'validatebox',
+                    options : {
+                      required : false,
+                    }
+                  }
+                },
+                {
+                  field : 'price',
+                  title : '本次采购价格',
+                  align : 'center',
+                  width : 80,
+                  editor : {
+                    type : 'validatebox',
+                    options : {
+                      required : false,
+                    }
+                  }
+                },
+
+              ] ],
+              toolbar : '#toolbar',
+
+              onLoadSuccess : function() {
+                parent.$.messager.progress('close');
+
+                $(this).datagrid('tooltip');
+              },
+              onAfterEdit : function(rowIndex, rowData, changes) {
+                //console.info(rowData);
+                afterEdit(rowIndex, rowData, changes);
+              },
+              onDblClickRow: function (index, row){
+                editFun(index);
+              }
+            });
+    afterSuccessLoad();
+
+    $('#addPurchasePlan').combogrid({
+      panelWidth:480,
+      panelHeight:450,
+      idField : 'id',
+      textField : 'sname',
+      pagination : true,
+      fitColumns : true,
+      fit : true,
+      rownumbers : true,// 显示行号
+
+      border : false,
+      striped : true,// 隔行变色
+      url: httphost + '/purchasePlan/getPurchasePlanDetails',
+      pageList : [15,30,50],
+      delay: 200,
+      keyHandler:  {      // 控件按键向后台请求数据
+        query: function (q) {
+          $('#addPurchasePlan').combogrid('grid').datagrid('load', {purchasePlanSName: q});
+          $('#addPurchasePlan').combogrid('setValue',q);
+        }
+      },
+      columns:[[
+        {field:'id',title:'ID',checkbox:true},
+        {field:'purchasePlanPid',title:'purchasePlanPid',hidden:true},
+        {field:'purchasePlanSno',title:'采购计划单号'},
+        {field:'goodsName',title:'商品名称'},
+        {field:'goodsTypeName',title:'商品类别',align:'center'},
+        {field:'num',title:'计划采购数量'},
+        {field:'alreadyNum',title:'已采购数量'},
+      ]],
+      onCheck:function (index,row){
+        insertARow(index,row);
+      },
+      onUnCheck:function (index,row){
+        removeARow(index,row);
+      }
+    })
+  });
+
+  /**
+   * 页面加载完毕后，马上运行此函数，根据是否为新增，进入编辑和新增功能
+   * szy
+   * 2023-3-30
+   */
+  function afterSuccessLoad(){
+    if(id > 0){		// 订单的修改页面
+      //获取单头信息
+      $.ajax({
+        type: "POST",
+        url: httphost + "/purchasePlan/getSinglePurchasePlan",
+        data: {'id':id},
+        success: function (result) {
+          //console.info(result.sno);
+          $('#sno').val(result.sno);
+          $('#warehouse').val(result.warehouse);
+          $('#createBy').val(result.createBy);
+          $('#dueDate').datebox('setValue',result.dueDate);
+          $('#w').window({title:"采购单： -- &nbsp;&nbsp; 修改"}) ;
+        }
+      });
+
+    }else{	// 新增界面
+      $('#w').window({title:"采购单： -- &nbsp;&nbsp; 新增"}) ;
+    }
+  }
+
+  function clearHead(){
+    $('#sno').val('');
+    $('#warehouse').val('');
+    $('#createBy').val('');
+    $('#dueDate').datebox('setValue','');
+  }
+
+  function editFun(index) {
+
+    if (editrow != 'undefined') {
+      dataGrid.datagrid('endEdit', editrow);
+    }
+    dataGrid.datagrid('removeEditor', [ 'id' ]);
+    dataGrid.datagrid('beginEdit', index);
+    editrow = index;
+  }
+
+  function deleteFun( ) {
+    //console.info(id);
+
+    let rows = dataGrid.datagrid('getChecked');
+    //console.info(rows);
+    if (rows.length > 0) {
+      parent.$.messager.confirm('询问', '您是否要删除当前采购计划单明细？', function(b) {
+        if (b) {
+          parent.$.messager.progress({
+            title : '提示',
+            text : '数据处理中，请稍后....'
+          });
+          let ids =[];
+          // 这里必须反过来循环，否则最后一条选中记录不能删除
+          for ( let i = rows.length-1; i >= 0 ; i--){
+            ids.push(rows[i].id);
+            let rowIndex = dataGrid.datagrid('getRowIndex',rows[i])
+            dataGrid.datagrid('deleteRow',rowIndex);
+          }
+
+          console.info(ids.join(','));
+
+          parent.$.messager.progress('close');
+        }
+      });
+    }else {
+      $.messager.alert('提示','请选择要删除的记录！','error')
+    }
+  }
+
+  function afterEdit(rowIndex, rowData, changes) {
+    editrow = 'undefined'; //开关复位
+  }
+
+  function saveFun() {
+
+    dataGrid.datagrid('endEdit', editrow); //editrow 为本页面的局部变量
+  }
+
+  function addFun() {
+    if (editrow != 'undefined') {
+      dataGrid.datagrid('endEdit', editrow);
+    }
+    if (editrow == 'undefined') {
+      dataGrid.datagrid('insertRow', {
+        index : 0,
+        row : {}
+      });
+      dataGrid.datagrid('beginEdit', 0);
+      editrow = 0;
+    }
+  }
+
+  /**
+   * 提交 保存数据
+   */
+  function submitFun(){
+    let inserted = dataGrid.datagrid('getChanges', 'inserted');
+    let updated = dataGrid.datagrid('getChanges', 'updated');
+    let deleted = dataGrid.datagrid('getChanges', 'deleted');
+
+    if (inserted.length > 0 || updated.length >0 || deleted.length > 0){
+      parent.$.messager.confirm('询问', '您是否要更新当前采购计划单？', function(b) {
+        if (b) {
+          parent.$.messager.progress({
+            title: '提示',
+            text: '数据处理中，请稍后....'
+          });
+          let purchasePlanDto = {
+            'id' : id,
+            'sno' : $('#sno').val(),
+            'warehouse' : $('#warehouse').val(),
+            'createBy' : $('#createBy').val(),
+            'dueDate' : $('#dueDate').datebox('getValue'),
+            'inserted': JSON.stringify(inserted),
+            'updated' : JSON.stringify(updated),
+            'deleted' : JSON.stringify(deleted),
+          };
+          //console.info(purchasePlanDto);
+          $.ajax({
+            type : "POST",
+            url : '/purchasePlan/add',
+            data : purchasePlanDto, //JSON.stringify(purchasePlanDto),
+            //	contentType: "application/json; charset=utf-8",
+            dataType : 'json',
+            success : function(r) {
+              if (r && r.success) {
+                parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
+                dataGrid.datagrid('reload');
+                clearHead()
+
+                /*id = r.id;
+                dataGrid.datagrid({url:httphost + '/purchasePlan/getPurchasePlanDetails/' + id});*/
+              } else {
+                parent.$.messager.alert('数据更新或插入', r.msg, 'error'); //easyui中的控件messager
+                dataGrid.datagrid('rejectChanges');
+              }
+            }
+          });
+
+
+        }
+      })
+    }
+  }
+
+
+</script>
+<body>
+
+<div id="w" class="easyui-window" title="采购单 " data-options="iconCls:'icon-save'" style="width:1000px;height:700px;padding:5px;">
+  <div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north',split:true" style="height:100px" >
+      <form id="fm_purchasePlan">
+        <table style="padding:10px 0 0 0;">
+          <tr><td>采购单号：</td><td><input id="sno" name="sno" ></td>
+            <td>供应商：</td><td><input id="supplier" name="supplier" ></td>
+            <td>送货地址：</td><td><input id="address" name="address" ></td>
+          </tr>
+          <tr> <td>制单人</td><td><input id="createBy" name="createBy" ></td>
+            <td>要求终完成日期：</td><td><input id="dueDate" name="dueDate" class="easyui-datebox" ></td>
+          </tr>
+        </table>
+        <div style="text-align:right;padding:2px 0 2px;">
+          <span style="padding:0px 86px 0px 0px ;">增加采购计划单：<input id="addPurchasePlan",name="addPurchasePlan"></span>
+          <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" href="javascript:void(0)" onclick="addFun()" style="width:90px">新增一行</a>
+          <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" href="javascript:void(0)" onclick="saveFun();" style="width:90px">暂存</a>
+          <a class="easyui-linkbutton" data-options="iconCls:'icon-remove'" href="javascript:void(0)" onclick="deleteFun();" style="width:90px">删除选中</a>
+          <a class="easyui-linkbutton" data-options="iconCls:'icon-reload'" href="javascript:void(0)" onclick="dataGrid.datagrid('reload');" style="width:90px">刷新</a>
+        </div>
+      </form>
+    </div>
+    <div data-options="region:'center'" style="padding:0 0 40px 0;">
+      <div id="dg_purchaseDetail"/>
+    </div>
+    <div data-options="region:'south'" style="text-align:right;padding:5px 0 0;">
+      <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="submitFun();" style="width:80px">Ok</a>
+      <a class="easyui-linkbutton" data-options="iconCls:'transmit'" href="javascript:void(0)" onclick="javascript:alert('cancel')" style="width:80px">Cancel</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

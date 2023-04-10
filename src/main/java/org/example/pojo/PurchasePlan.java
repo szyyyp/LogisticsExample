@@ -26,7 +26,7 @@ public class PurchasePlan extends BaseEntity implements Serializable {
     @Column(name = "addition")
     String addition;   //附加说明
 
-    @OneToMany(mappedBy = "purchasePlan", fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToMany(mappedBy = "purchasePlan", fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
     @JsonIgnore
     Set<PurchasePlanDetail> purchasePlanDetailSet = new HashSet<>();
 

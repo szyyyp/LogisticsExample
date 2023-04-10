@@ -91,7 +91,7 @@
                         title : '操作',
                         width : 70,
                         formatter : function(value, row, index) {
-                            var str = '';
+                            let str = '';
                             str += $
                                 .formatString(
                                     '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
@@ -136,7 +136,7 @@
     }
 
     function clearHisData(){
-        var flag=confirm("确认要删除吗?");
+        let flag=confirm("确认要删除吗?");
         if(flag){
             $.ajax({
                 url : httphost + '/realWeight/clearHisRealWeight',

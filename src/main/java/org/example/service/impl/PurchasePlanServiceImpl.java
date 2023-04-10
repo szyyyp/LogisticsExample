@@ -28,12 +28,8 @@ public class PurchasePlanServiceImpl extends BaseServiceImpl<PurchasePlan, Integ
     GoodsDao goodsDao;
 
     @Resource(name = "purchasePlanDaoImpl")
-    PurchasePlanDao dao;
-
-    @Resource(name = "purchasePlanDaoImpl")
     public void setBaseDao(PurchasePlanDao dao) {
         super.setBaseDao(dao);
-        this.dao = dao;
     }
 
     public boolean editPurchasePlan(PurchasePlan purchasePlan, List<PurchasePlanDetailDto> lstInserted, List<PurchasePlanDetailDto> lstUpdated,

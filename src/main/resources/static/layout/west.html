@@ -38,45 +38,45 @@
                 "url": "/student.html",
             },
         },
-          {
-            "text": "课程信息",
-            "checked": false,
-            "iconCls": "xhtml_go",
-            "attributes": {
-                 "url": "/course.html",
-            },
-        },
-        {
-            "text": "入库管理",
-            "state": "open",
-            "iconCls": "icon_moinitor",
-            "children": [{
-                "text": "采购计划",
-                "checked": true,
-                "iconCls": "table_refresh",
+            {
+                "text": "课程信息",
+                "checked": false,
+                "iconCls": "xhtml_go",
                 "attributes": {
-                    "url": "/purchasePlan/list.html",
+                    "url": "/course.html",
                 },
-            }, {
-                // "id": 8,
-                "text": "采购订单",
+            },
+            {
+                "text": "入库管理",
                 "state": "open",
-                "iconCls": "table_refresh",
-                "attributes": {
-                    "url": "/purchase.html",
+                "iconCls": "icon_moinitor",
+                "children": [{
+                    "text": "采购计划",
+                    "checked": true,
+                    "iconCls": "table_refresh",
+                    "attributes": {
+                        "url": "/purchasePlan/list.html",
+                    },
+                }, {
+                    // "id": 8,
+                    "text": "采购订单",
+                    "state": "open",
+                    "iconCls": "table_refresh",
+                    "attributes": {
+                        "url": "/purchase/list.html",
+                    }
+                }, {
+                    // "id": 8,
+                    "text": "入库单",
+                    "state": "open",
+                    "iconCls": "table_refresh",
+                    "attributes": {
+                        "url": "/entryBill.html",
+                    }
                 }
-            }, {
-                // "id": 8,
-                "text": "入库单",
-                "state": "open",
-                "iconCls": "table_refresh",
-                "attributes": {
-                    "url": "/entryBill.html",
-                }
-            }
 
-            ]
-        }]
+                ]
+            }]
     }, {
         "text": "基础数据",
         "state": "open",

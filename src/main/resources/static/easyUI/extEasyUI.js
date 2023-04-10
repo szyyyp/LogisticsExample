@@ -87,7 +87,7 @@ $.fn.panel.defaults.onMove = easyuiPanelOnMove;
  */
 var easyuiErrorFunction = function(XMLHttpRequest) {
 	$.messager.progress('close');
-	$.messager.alert('错误', XMLHttpRequest.responseText);
+	$.messager.alert('错误', XMLHttpRequest.responseText).window({ width:1200, height: 700 });
 };
 $.fn.datagrid.defaults.onLoadError = easyuiErrorFunction;
 $.fn.treegrid.defaults.onLoadError = easyuiErrorFunction;

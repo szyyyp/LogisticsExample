@@ -32,6 +32,9 @@ public class PurchasePlanDetail implements Serializable {
     @Column(name = "price")
     Float price;
 
+    @Column(name = "alreadyNum")
+    Integer alreadyNum;
+
     @JoinColumn(name="purchasePlanPid")
     @ManyToOne(targetEntity=PurchasePlan.class,fetch = FetchType.LAZY)
     @JsonIgnore
@@ -51,13 +54,20 @@ public class PurchasePlanDetail implements Serializable {
     }
 
     @Transient
-    public Integer purchasePlanPid(){
+    public Integer getPurchasePlanPid(){
         if (purchasePlan!=null)
             return purchasePlan.getId();
         else
             return null;
     }
 
+    @Transient
+    public String getPurchasePlanSno(){
+        if (purchasePlan!=null)
+            return purchasePlan.getSno();
+        else
+            return null;
+    }
     @Transient
     public String getGoodsName(){
         if (goods!=null)
@@ -96,6 +106,7 @@ public class PurchasePlanDetail implements Serializable {
                 ", num=" + num +
                 ", price=" + price +
                 ", goods=" + goods +
+                ", alreadyNum=" + alreadyNum +
                 '}';
     }
 }

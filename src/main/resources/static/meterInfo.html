@@ -173,9 +173,9 @@
                             sortable : true,
                             align : "center",
                             formatter:function(value, row, index){
-                                if (value == 0) return "g";
-                                if (value == 1) return "Kg";
-                                if (value == 2) return "T";
+                                if (value === 0) return "g";
+                                if (value === 1) return "Kg";
+                                if (value === 2) return "T";
                             },
                             editor : {
                                 type : 'combobox',
@@ -278,8 +278,8 @@
                                 }
                             },
                             formatter:function(value, row, index) {
-                                if (value == 0) return "<color=\"red\">" + "不记录" + "</font>";
-                                if (value == 1) return "<color=\"green\">" + "记录" + "</font>";
+                                if (value === 0) return "<color=\"red\">" + "不记录" + "</font>";
+                                if (value === 1) return "<color=\"green\">" + "记录" + "</font>";
                             },
                         },
                         {
@@ -288,7 +288,7 @@
                             width : 70,
                             align : "center",
                             formatter : function(value, row, index) {
-                                var str = '';
+                                let str = '';
                                 str += $
                                     .formatString(
                                         '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
@@ -324,10 +324,10 @@
     });
 
     function afterEdit(rowIndex, rowData, changes) {
-        var inserted = dataGrid.datagrid('getChanges', 'inserted');
-        var updated = dataGrid.datagrid('getChanges', 'updated');
-        var url = "";
-        var data = {};
+        let inserted = dataGrid.datagrid('getChanges', 'inserted');
+        let updated = dataGrid.datagrid('getChanges', 'updated');
+        let url = "";
+        let data = {};
         if (inserted.length > 0) {
             url = "/meter/add";
             data = inserted[0];
@@ -360,10 +360,10 @@
 
     function deleteFun(id) {
         //console.info(id);
-        if (id != undefined) {
+        if (id !== undefined) {
             dataGrid.datagrid('selectRow', id);
         }
-        var rows = dataGrid.datagrid('getSelections');
+        let rows = dataGrid.datagrid('getSelections');
         //console.info(rows);
         if (rows.length > 0) {
             parent.$.messager.confirm('询问', '您是否要删除当前称？', function(b) {
@@ -388,7 +388,7 @@
     }
 
     function editFun(index) {
-        if (editrow != 'undefined') {
+        if (editrow !== 'undefined') {
             dataGrid.datagrid('endEdit', editrow);
         }
         dataGrid.datagrid('removeEditor', [ 'id' ]);
@@ -397,10 +397,10 @@
     }
 
     function addFun() {
-        if (editrow != 'undefined') {
+        if (editrow !== 'undefined') {
             dataGrid.datagrid('endEdit', editrow);
         }
-        if (editrow == 'undefined') {
+        if (editrow === 'undefined') {
             /*            dataGrid.datagrid('addEditor', {
                             field : 'id',
                             editor : {
@@ -434,7 +434,7 @@
         myvalid: {
             validator: function (value, param) {
                 //return /^[A-F\d]{5}$/.test(value)//其他长度注意改正则,只能输入A-F或数字且长度为5！
-                return /^[\d]{1,10}$/.test(value)   //验证1-999之间的所有正整数
+                return /^\d{1,10}$/.test(value)   //验证1-999之间的所有正整数
             },
             message: '只能输入10-99999 99999之间的正整数！'
         }

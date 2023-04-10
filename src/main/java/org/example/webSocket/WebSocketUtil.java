@@ -27,28 +27,4 @@ public class WebSocketUtil {
         return JsonUtils.toJson(msg);
     }
 
-    /**
-     *  send Real data  message
-     */
-    public static void sendPurchasePlanStringMsg(String message ) {
-        CopyOnWriteArraySet<PurchasePlanWebSocket> webSocketSet = PurchasePlanWebSocket.getWebSocket();
-        try {
-            for (PurchasePlanWebSocket s : webSocketSet){
-                synchronized (s) {
-                    s.sendStringMessage(message);    //异步会报错，这里用同步好
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void sendPurchasePlanObject(Object o){
-        CopyOnWriteArraySet<PurchasePlanWebSocket> webSocketSet = PurchasePlanWebSocket.getWebSocket();
-        //遍历储存的Websocket
-        for (PurchasePlanWebSocket ws : webSocketSet) {
-            //发送
-            ws.sendObject(o);
-        }
-    }
 }

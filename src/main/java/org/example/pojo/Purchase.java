@@ -25,7 +25,10 @@ public class Purchase extends BaseEntity implements Serializable {
     @Column(name = "address")
     String address;     // 收货地址
 
-    @OneToMany(mappedBy = "purchase", fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @Column(name = "dueDate")
+    String dueDate;     //  要求的送货日期
+
+    @OneToMany(mappedBy = "purchase", fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
     @JsonIgnore
     Set<PurchaseDetail> purchaseDetailSet = new HashSet<>();
 
