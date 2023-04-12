@@ -54,8 +54,7 @@
   let dataGrid;
 
   function insertARow(index, data) {
-    //let purchaseDetails = dataGrid.datagrid('getData').rows;
-    //console.info(data);
+
     dataGrid.datagrid('insertRow',
             {index:0,
               row:{'purchasePlanSno': data.purchasePlanSno,
@@ -67,7 +66,7 @@
                 'purchasePlanDetailAlreadyNum':data.alreadyNum,
                 'purchasePlanDetailPrice': data.price}
             });
-    //console.info(dataGrid.datagrid('getData').rows);
+
   }
 
   $(function() {
@@ -87,8 +86,11 @@
               groupField: 'purchasePlanPid',
               view: groupview,
               groupFormatter:function(value, rows){
-                //console.info(rows)
-                return "采购计划单号=：" + rows[0].purchasePlanSno + ' -- 共：' + rows.length + " 条待采购明细";
+                //console.info(rows[0]);
+                if ("undefined" !== typeof rows[0].purchasePlanSno)
+                  return "采购计划单号 ：<font color='blue'>" + rows[0].purchasePlanSno + ' </font>-- 共：' + rows.length + " 条待采购明细";
+                else
+                  return  "采购计划单号 ：<font color='red'>新增,无单号</font></font>"  + ' -- 共：' + rows.length + " 条待采购明细";
               },
               frozenColumns : [ [
                 {
@@ -201,7 +203,6 @@
       fitColumns : true,
       fit : true,
       rownumbers : true,// 显示行号
-
       border : false,
       striped : true,// 隔行变色
       url: httphost + '/purchasePlan/getPurchasePlanDetails',
@@ -212,6 +213,15 @@
           $('#addPurchasePlan').combogrid('grid').datagrid('load', {purchasePlanSName: q});
           $('#addPurchasePlan').combogrid('setValue',q);
         }
+      },
+      groupField: 'purchasePlanPid',
+      view: groupview,
+      groupFormatter:function(value, rows){
+        //console.info(rows[0]);
+        if ("undefined" !== typeof rows[0].purchasePlanSno)
+          return "采购计划单号 ：<font color='blue'>" + rows[0].purchasePlanSno + ' </font>-- 共：' + rows.length + " 条待采购明细";
+        else
+          return  "采购计划单号 ：<font color='red'>新增,无单号</font></font>"  + ' -- 共：' + rows.length + " 条待采购明细";
       },
       columns:[[
         {field:'id',title:'ID',checkbox:true},
@@ -276,8 +286,6 @@
   }
 
   function deleteFun( ) {
-    //console.info(id);
-
     let rows = dataGrid.datagrid('getChecked');
     //console.info(rows);
     if (rows.length > 0) {
