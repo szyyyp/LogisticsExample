@@ -54,7 +54,26 @@
   let dataGrid;
 
   function insertARow(index, data) {
-
+    let dataRows = dataGrid.datagrid('getData').rows;
+    // console.info(dataRows);
+    for ( i=0; i<dataRows.length; i++){
+      if (data.id === dataRows[i].purchasePlanDetailPid){
+        parent.$.messager.show({
+          title:'信息！',
+          msg:'该条采购计划明细数据已经添加',
+          timeout:2000,
+          width:250,
+          height:100,
+          showType:'slide',
+          style:{
+            right:'',
+            top:document.body.scrollTop+document.documentElement.scrollTop,
+            bottom:''
+          }
+        });
+        return;
+      }
+    }
     dataGrid.datagrid('insertRow',
             {index:0,
               row:{'purchasePlanSno': data.purchasePlanSno,
@@ -303,7 +322,7 @@
             dataGrid.datagrid('deleteRow',rowIndex);
           }
 
-          console.info(ids.join(','));
+          // console.info(ids.join(','));
 
           parent.$.messager.progress('close');
         }
