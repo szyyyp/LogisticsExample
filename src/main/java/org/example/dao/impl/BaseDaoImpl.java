@@ -137,7 +137,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 	}
 
 	private List<Filter> getFilters(T t){
-		List<Filter> filters = new ArrayList<Filter>();
+		List<Filter> filters = new ArrayList<>();
 		// Field[] fields = t.getClass().getDeclaredFields(); // 获取对象的所有属性对象：type，name，value
 
 		List<Field> fields = getAllField (t.getClass());
@@ -172,7 +172,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 	       try {    
 	           String firstLetter = fieldName.substring(0, 1).toUpperCase();    
 	           String getter = "get" + firstLetter + fieldName.substring(1);    
-	           Method method = o.getClass().getMethod(getter, new Class[] {});    
+	           Method method = o.getClass().getMethod(getter, new Class[] {});
 	           return method.invoke(o, new Object[] {});
 	       } catch (Exception e) {
 	        //   log.error(e.getMessage(),e);    
