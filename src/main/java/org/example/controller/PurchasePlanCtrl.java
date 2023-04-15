@@ -74,7 +74,7 @@ public class PurchasePlanCtrl {
     @RequestMapping("/getPurchasePlanDetails/{purchasePlanPid}")
     public Page<PurchasePlanDetail> getPurchasePlanDetails(Pageable page,PurchasePlanDetail purchasePlanDetail,
                                                            @PathVariable(value = "purchasePlanPid",required = false) Integer purchasePlanPid){
-
+        purchasePlanDetail.setIsClose(0);
         if (purchasePlanPid!=null ){
             List<Filter> filters = new ArrayList<>();
             Filter ft = new Filter();
@@ -202,4 +202,18 @@ public class PurchasePlanCtrl {
         return json;
     }
 
+    @RequestMapping("/del")
+    public Json del(Integer id) {
+        Json json = new Json();
+        try {
+            purchasePlanService.delete(id);
+            json.setSuccess(true);
+            json.setMsg("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.setSuccess(true);
+            json.setMsg("删除失败");
+        }
+        return json;
+    }
 }

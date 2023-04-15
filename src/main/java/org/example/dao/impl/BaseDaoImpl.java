@@ -122,7 +122,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 	}
 
 	/**
-	 *  获取对象的所有属性，包括父对象
+	 *  获取对象的所有属性，包括父对象 2023.3.14添加
 	 * @param class1
 	 * @return
 	 */

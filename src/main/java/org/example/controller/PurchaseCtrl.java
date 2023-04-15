@@ -3,10 +3,12 @@ package org.example.controller;
 import org.example.pageModel.*;
 import org.example.pojo.Purchase;
 import org.example.pojo.PurchaseDetail;
+import org.example.pojo.PurchasePlan;
 import org.example.service.PurchaseDetailService;
 import org.example.service.PurchaseService;
 import org.example.util.JsonUtils;
 import org.example.webSocket.PurchaseWebSocket;
+import org.example.webSocket.WebSocketUtil;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +39,7 @@ public class PurchaseCtrl {
 
     @RequestMapping("/getData")
     public Page<Purchase> getData(Pageable page, Purchase purchase, String start, String end){
-        page.setOrderProperty("createTime");
+        page.setOrderProperty("updateTime");
         page.setOrderDirection(Order.Direction.desc);
 
         List<Filter> filters = new ArrayList<>();
@@ -115,6 +117,7 @@ public class PurchaseCtrl {
             if (hasEdit) {
                 json.setSuccess(true);
                 json.setMsg("采购计划单更新成功！");
+                purchaseWebSocket.sendStringMessage(WebSocketUtil.generateMsg(null, 0));
                 return  json;
             }
         }catch (Exception e){
@@ -125,4 +128,57 @@ public class PurchaseCtrl {
         return  json;
     }
 
+    @RequestMapping("/add")
+    public Json add(Purchase purchase,
+                    @RequestParam(value = "inserted", required = false) String inserted,
+                    @RequestParam(value = "updated", required = false) String updated){
+        Json json = new Json();
+        List<PurchaseDetailDto> lstInserted = new ArrayList<>();
+        List<PurchaseDetailDto> lstUpdated = new ArrayList<>();
+
+        if (!inserted.isEmpty()){
+            lstInserted = JsonUtils.getListBeans(inserted, PurchaseDetailDto.class);
+        }
+        if (!updated.isEmpty()){
+            lstUpdated = JsonUtils.getListBeans(updated, PurchaseDetailDto.class);
+        }
+
+        if (lstInserted!=null && lstUpdated!=null)
+            lstInserted.addAll(lstUpdated);
+
+        String errStr="";
+
+        try {
+            boolean hasAdded = purchaseService.addPurchase(purchase, lstInserted);
+            if (hasAdded) {
+                json.setSuccess(true);
+                Integer id = purchase.getId();
+                json.setId(id);
+                json.setMsg("新增采购单成功！");
+                purchaseWebSocket.sendStringMessage(WebSocketUtil.generateMsg(null, 0));
+                return  json;
+            }
+        }catch (Exception e){
+            errStr = e.getMessage();
+           // e.printStackTrace();
+        }
+        json.setSuccess(false);
+        json.setMsg("采购单新增失败！\n\n" + errStr);
+        return json;
+    }
+
+    @RequestMapping("/del")
+    public Json del(Integer id) {
+        Json json = new Json();
+        try {
+            purchaseService.delete(id);
+            json.setSuccess(true);
+            json.setMsg("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.setSuccess(true);
+            json.setMsg("删除失败");
+        }
+        return json;
+    }
 }

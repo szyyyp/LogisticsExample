@@ -166,7 +166,25 @@
      * @param id    计划单的 数据库 id
      */
     function deleteFun(id) {
+        console.info(id);
+        let flag = confirm("确认要删除吗?");
+        if (flag) {
+            $.ajax({
+                type: "POST",
+                url: '/purchase/del',
+                data: {'id': id},
+                dataType: 'json',
+                success: function (r) {
+                    if (r && r.success) {
+                        parent.$.messager.alert('删除成功！', r.msg); //easyui中的控件messager
+                        dataGrid.datagrid('reload');
 
+                    } else {
+                        parent.$.messager.alert('删除失败！', r.msg, 'error'); //easyui中的控件messager
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -227,7 +245,7 @@
 <div id="toolbar" style="display: none;">
     <a	onclick="addPlans();" href="javascript:void(0);"
           class="easyui-linkbutton"
-          data-options="plain:true,iconCls:'icon-add'">添加计划单</a>&nbsp;&nbsp;
+          data-options="plain:true,iconCls:'icon-add'">添加采购单</a>&nbsp;&nbsp;
     <a	onclick="dataGrid.datagrid('reload');" href="javascript:void(0);"
           class="easyui-linkbutton"
           data-options="plain:true,iconCls:'transmit'">刷新</a>&nbsp;&nbsp;

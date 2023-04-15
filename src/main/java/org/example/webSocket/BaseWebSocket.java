@@ -17,7 +17,7 @@ public abstract class BaseWebSocket  {
     public void onOpen(Session session) {
         this.session = session;
         webSockets.add(this);
-        sendStringMessage("websocket connected!");
+       // sendStringMessage("websocket connected!");
     }
 
     @OnMessage
@@ -35,28 +35,8 @@ public abstract class BaseWebSocket  {
     @OnClose
     public void onClose() {
         //todo
+        webSockets.remove(this);
     }
 
-    public void sendStringMessage(String message) {
-        try {
-            for (BaseWebSocket socket: webSockets) {
-               // synchronized (session) {
-                   // sock.session.getBasicRemote().sendText(message);    //异步会报错，这里用同步好
-                    socket.session.getAsyncRemote().sendText(message);
-              //  }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void sendObject(Object o){
-        try {
-            for (BaseWebSocket socket: webSockets) {
-                socket.session.getAsyncRemote().sendObject(o);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

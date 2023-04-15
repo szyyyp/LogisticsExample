@@ -1,6 +1,7 @@
 package org.example.service.impl;
 
 import org.example.dao.*;
+import org.example.exception.ExceedException;
 import org.example.pageModel.PurchaseDetailDto;
 import org.example.pojo.*;
 import org.example.service.PurchaseService;
@@ -43,7 +44,12 @@ public class PurchaseServiceImpl extends BaseServiceImpl<Purchase, Integer> impl
         //新删除的表细数据
         if (lstDeleted.size()>0){
             for (PurchaseDetailDto d : lstDeleted){
-                purchaseDetailDao.remove(purchaseDetailDao.find(d.getId()));
+                PurchaseDetail purchaseDetail = purchaseDetailDao.find(d.getId());
+                // 把删除的采购数量加回去
+                int alreadyNum = purchaseDetail.getPurchasePlanDetail().getAlreadyNum() - purchaseDetail.getNum();
+                purchaseDetail.getPurchasePlanDetail().setAlreadyNum(alreadyNum);
+                purchaseDetailDao.merge(purchaseDetail);
+                purchaseDetailDao.remove(purchaseDetail);
             }
         }
 
@@ -52,9 +58,13 @@ public class PurchaseServiceImpl extends BaseServiceImpl<Purchase, Integer> impl
             for (PurchaseDetailDto d : lstInserted) {
                 PurchaseDetail purchaseDetail = new PurchaseDetail();
                 purchaseDetail.setPurchase(pur_in_dataBase);                // 设置关联
-                PurchasePlanDetail purchasePlanDetail = purchasePlanDetailDao.find(d.getPurchasePlanDetailPid());
+
+                PurchasePlanDetail purchasePlanDetail = purchasePlanDetailDao.find(d.getId());
                 purchaseDetail.setPurchasePlanDetail(purchasePlanDetail);       // 设置关联
-                BeanUtils.copyProperties(d,purchaseDetail, "purchasePid","purchasePlanDetailPid");
+                BeanUtils.copyProperties(d,purchaseDetail, "id","purchasePid","purchasePlanDetailPid");
+
+                setAlreadyNum(d, purchaseDetail, purchasePlanDetail);
+
                 purchaseDetailDao.persist(purchaseDetail);
             }
         }
@@ -63,10 +73,23 @@ public class PurchaseServiceImpl extends BaseServiceImpl<Purchase, Integer> impl
         if (lstUpdated.size() > 0){
             for (PurchaseDetailDto d : lstUpdated) {
                 PurchaseDetail purchaseDetail = purchaseDetailDao.find(d.getId());
-                PurchasePlanDetail purchasePlanDetail = purchasePlanDetailDao.find(d.getPurchasePlanDetailPid());
+                PurchasePlanDetail purchasePlanDetail = purchasePlanDetailDao.find(d.getId());
                 purchaseDetail.setPurchasePlanDetail(purchasePlanDetail);       // 设置关联
-                BeanUtils.copyProperties(d,purchaseDetail, "purchasePid","purchasePlanDetailPid");
+                BeanUtils.copyProperties(d,purchaseDetail, "id","purchasePid","purchasePlanDetailPid");
                 purchaseDetailDao.persist(purchaseDetail);
+
+                // 更新采购计划明细的已采购量: = 当前余量 - 当前已经采购 + 新采购的
+                int alreadyNum = purchaseDetail.getPurchasePlanDetail().getAlreadyNum() - purchaseDetail.getNum() +
+                        d.getNum();
+                if (alreadyNum > purchasePlanDetail.getNum()){
+                    //抛出 错误，便于前端处理
+                    // todo 请自己补充完整下面的代码
+
+                    throw new ExceedException("采购量已超过计划量");
+                }else{
+                    purchaseDetail.getPurchasePlanDetail().setAlreadyNum(alreadyNum);       //更新采购计划明细的已采购量
+                }
+                purchasePlanDetailDao.persist(purchasePlanDetail);
             }
         }
 
@@ -82,10 +105,14 @@ public class PurchaseServiceImpl extends BaseServiceImpl<Purchase, Integer> impl
         if (lstInserted.size() > 0){
             for (PurchaseDetailDto d : lstInserted) {
                 PurchaseDetail purchaseDetail = new PurchaseDetail();
-                PurchasePlanDetail purchasePlanDetail = purchasePlanDetailDao.find(d.getPurchasePlanDetailPid());
-                purchaseDetail.setPurchasePlanDetail(purchasePlanDetail);       // 设置关联
                 purchaseDetail.setPurchase(purchase);
-                BeanUtils.copyProperties(d, purchasePlanDetail, "purchasePid", "purchasePlanDetailPid");
+
+                PurchasePlanDetail purchasePlanDetail = purchasePlanDetailDao.find(d.getId());
+                purchaseDetail.setPurchasePlanDetail(purchasePlanDetail);       // 设置关联
+                BeanUtils.copyProperties(d, purchaseDetail, "id","purchasePid", "purchasePlanDetailPid");
+
+                setAlreadyNum(d, purchaseDetail, purchasePlanDetail);
+
                 purchaseDetailSet.add(purchaseDetail);
             }
         }
@@ -93,5 +120,20 @@ public class PurchaseServiceImpl extends BaseServiceImpl<Purchase, Integer> impl
 
         this.save(purchase);
         return true;
+    }
+
+    private static void setAlreadyNum(PurchaseDetailDto d, PurchaseDetail purchaseDetail, PurchasePlanDetail purchasePlanDetail) {
+        // 更新采购计划明细的已采购量
+        int alreadyNum = purchasePlanDetail.getAlreadyNum()!=null? purchasePlanDetail.getAlreadyNum() : 0;
+        int num = d.getNum()!=null? d.getNum() : 0 ;
+        alreadyNum += num;
+        if (alreadyNum > purchasePlanDetail.getNum()){
+            //抛出 错误，便于前端处理
+            // todo 请自己补充完整下面的代码
+
+            throw new ExceedException("采购量已超过计划量");
+        }else{
+            purchaseDetail.getPurchasePlanDetail().setAlreadyNum(alreadyNum);       //更新采购计划明细的已采购量
+        }
     }
 }

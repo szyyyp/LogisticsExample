@@ -177,7 +177,24 @@
      * @param id    计划单的 数据库 id
      */
     function deleteFun(id) {
+        let flag = confirm("确认要删除吗?");
+        if (flag) {
+            $.ajax({
+                type: "POST",
+                url: '/purchasePlan/del',
+                data: {'id': id},
+                dataType: 'json',
+                success: function (r) {
+                    if (r && r.success) {
+                        parent.$.messager.alert('删除成功！', r.msg); //easyui中的控件messager
+                        dataGrid.datagrid('reload');
 
+                    } else {
+                        parent.$.messager.alert('删除失败！', r.msg, 'error'); //easyui中的控件messager
+                    }
+                }
+            });
+        }
     }
 
     /**

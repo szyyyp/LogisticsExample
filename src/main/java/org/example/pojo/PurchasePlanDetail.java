@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.util.DataUtil;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -35,6 +37,9 @@ public class PurchasePlanDetail implements Serializable {
     @Column(name = "alreadyNum")
     Integer alreadyNum;
 
+    @Column(name = "isClose")
+    int isClose;            // 1: 本采购项目已经完结， 否则为 0；
+
     @JoinColumn(name="purchasePlanPid")
     @ManyToOne(targetEntity=PurchasePlan.class,fetch = FetchType.LAZY)
     @JsonIgnore
@@ -44,6 +49,15 @@ public class PurchasePlanDetail implements Serializable {
     @ManyToOne(targetEntity=Goods.class,fetch = FetchType.LAZY)
     @JsonIgnore
     Goods goods;
+
+
+    @PreUpdate
+    public void preUpdate(){
+        if (this.alreadyNum - this.num >=0)
+            this.isClose = 1;
+        else
+            this.isClose = 0;
+    }
 
     @Transient
     public Integer getGoodsPid(){

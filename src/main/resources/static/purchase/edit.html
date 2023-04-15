@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>采购单 -- 新增</title>
+  <title>采购单 -- 編輯</title>
 </head>
 <link rel="stylesheet" type="text/css" href="../../easyUI/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="../../easyUI/themes/icon.css">
@@ -270,12 +270,13 @@
       //获取单头信息
       $.ajax({
         type: "POST",
-        url: httphost + "/purchasePlan/getSinglePurchasePlan",
+        url: httphost + "/purchase/getSinglePurchase",
         data: {'id':id},
         success: function (result) {
           //console.info(result.sno);
           $('#sno').val(result.sno);
-          $('#warehouse').val(result.warehouse);
+          $('#supplier').val(result.supplier);
+          $('#address').val(result.address);
           $('#createBy').val(result.createBy);
           $('#dueDate').datebox('setValue',result.dueDate);
           $('#w').window({title:"采购单： -- &nbsp;&nbsp; 修改"}) ;
@@ -385,17 +386,18 @@
           //console.info(purchasePlanDto);
           $.ajax({
             type : "POST",
-            url : '/purchase/add',
+            url : '/purchase/edit',
             data : purchaseDto, //JSON.stringify(purchasePlanDto),
             //	contentType: "application/json; charset=utf-8",
             dataType : 'json',
             success : function(r) {
               if (r && r.success) {
-               // parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
-                alert(r.msg);
-                /*dataGrid.datagrid('reload');
+                /*parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
+                dataGrid.datagrid('reload');
                 clearHead()*/
+                alert(r.msg);
                 window.close();
+
                 /*id = r.id;
                 dataGrid.datagrid({url:httphost + '/purchasePlan/getPurchasePlanDetails/' + id});*/
               } else {

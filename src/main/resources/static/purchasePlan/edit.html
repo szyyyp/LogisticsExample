@@ -325,9 +325,11 @@
 						dataType : 'json',
 						success : function(r) {
 							if (r && r.success) {
-								parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
+								/*parent.$.messager.alert('数据更新', r.msg); //easyui中的控件messager
 								//dataGrid.datagrid('acceptChanges');
-								dataGrid.datagrid('reload');
+								dataGrid.datagrid('reload');*/
+								alert(r.msg);
+								window.close();
 							} else {
 								parent.$.messager.alert('数据更新或插入', r.msg, 'error'); //easyui中的控件messager
 								dataGrid.datagrid('rejectChanges');
@@ -394,7 +396,7 @@
 		</div>
 		<div data-options="region:'south'" style="text-align:right;padding:5px 0 0;">
 			<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="submitFun();" style="width:80px">Ok</a>
-			<a class="easyui-linkbutton" data-options="iconCls:'transmit'" href="javascript:void(0)" onclick="javascript:alert('cancel')" style="width:80px">Cancel</a>
+			<a class="easyui-linkbutton" data-options="iconCls:'transmit'" href="javascript:void(0)" onclick="window.close();" style="width:80px">Cancel</a>
 		</div>
 	</div>
 </div>
