@@ -581,7 +581,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 			return;
 		}
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		List<javax.persistence.criteria.Order> orderList = new ArrayList<javax.persistence.criteria.Order>();
+		List<javax.persistence.criteria.Order> orderList = new ArrayList<>();
 		if (!criteriaQuery.getOrderList().isEmpty()) {
 			orderList.addAll(criteriaQuery.getOrderList());
 		}
@@ -604,7 +604,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 			return;
 		}
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		List<javax.persistence.criteria.Order> orderList = new ArrayList<javax.persistence.criteria.Order>();
+		List<javax.persistence.criteria.Order> orderList = new ArrayList<>();
 		if (!criteriaQuery.getOrderList().isEmpty()) {
 			orderList.addAll(criteriaQuery.getOrderList());
 		}

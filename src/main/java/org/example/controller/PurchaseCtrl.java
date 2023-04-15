@@ -3,7 +3,6 @@ package org.example.controller;
 import org.example.pageModel.*;
 import org.example.pojo.Purchase;
 import org.example.pojo.PurchaseDetail;
-import org.example.pojo.PurchasePlan;
 import org.example.service.PurchaseDetailService;
 import org.example.service.PurchaseService;
 import org.example.util.JsonUtils;

@@ -2,9 +2,7 @@ package org.example.webSocket;
 
 import org.springframework.stereotype.Component;
 
-import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * 采购计划单 有变化后，给list页面发送消息
