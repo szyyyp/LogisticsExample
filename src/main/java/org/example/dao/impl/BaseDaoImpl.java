@@ -173,9 +173,8 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 	           String firstLetter = fieldName.substring(0, 1).toUpperCase();    
 	           String getter = "get" + firstLetter + fieldName.substring(1);    
 	           Method method = o.getClass().getMethod(getter, new Class[] {});    
-	           Object value = method.invoke(o, new Object[] {});    
-	           return value;    
-	       } catch (Exception e) {    
+	           return method.invoke(o, new Object[] {});
+	       } catch (Exception e) {
 	        //   log.error(e.getMessage(),e);    
 	           return null;    
 	       }    
@@ -302,7 +301,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 		TypedQuery<T> query = entityManager.createQuery(criteriaQuery).setFlushMode(FlushModeType.COMMIT);
 		query.setFirstResult((pageable.getPage() - 1) * pageable.getRows());
 		query.setMaxResults(pageable.getRows());
-		return new Page<T>(query.getResultList(), total, pageable);
+		return new Page< >(query.getResultList(), total, pageable);
 	}
 
 	protected Long count(CriteriaQuery<T> criteriaQuery, List<Filter> filters) {
@@ -560,7 +559,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.get(filter.getProperty()), (Number) filter.getValue()));
 			} else if (filter.getOperator() == Filter.Operator.like && filter.getValue() != null && filter.getValue() instanceof String) {
 				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder
-						.like(root.<String> get(filter.getProperty()), "%" + filter.getValue() + "%"));
+						.like(root.get(filter.getProperty()), "%" + filter.getValue() + "%"));
 			} else if (filter.getOperator() == Filter.Operator.in && filter.getValue() != null) {
 				restrictions = criteriaBuilder.and(restrictions, root.get(filter.getProperty()).in(filter.getValue()));
 			} else if (filter.getOperator() == Filter.Operator.isNull) {
