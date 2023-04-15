@@ -407,13 +407,13 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 				aa=filter.getValue().getClass().getSimpleName();
 			if (filter.getOperator() == Filter.Operator.eq && filter.getValue() != null) {
 				if (filter.getIgnoreCase() != null && filter.getIgnoreCase() && filter.getValue() instanceof String) {
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(criteriaBuilder.lower(root.<String> get(filter.getProperty())), ((String) filter.getValue()).toLowerCase()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(criteriaBuilder.lower(root.get(filter.getProperty())), ((String) filter.getValue()).toLowerCase()));
 				} else {
 					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get(filter.getProperty()), filter.getValue()));
 				}
 			} else if (filter.getOperator() == Filter.Operator.ne && filter.getValue() != null) {
 				if (filter.getIgnoreCase() != null && filter.getIgnoreCase() && filter.getValue() instanceof String) {
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.notEqual(criteriaBuilder.lower(root.<String> get(filter.getProperty())), ((String) filter.getValue()).toLowerCase()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.notEqual(criteriaBuilder.lower(root.get(filter.getProperty())), ((String) filter.getValue()).toLowerCase()));
 				} else {
 					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.notEqual(root.get(filter.getProperty()), filter.getValue()));
 				}
@@ -421,32 +421,32 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 //				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.gt(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
 				//mark
 				if (aa.equalsIgnoreCase("string"))
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.greaterThan(root.<String> get(filter.getProperty()), (String) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.greaterThan(root.get(filter.getProperty()), (String) filter.getValue()));
 				else
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.gt(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.gt(root.get(filter.getProperty()), (Number) filter.getValue()));
 			} else if (filter.getOperator() == Filter.Operator.lt && filter.getValue() != null) {
 //				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lt(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
 				//mark
 				if (aa.equalsIgnoreCase("string"))
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lessThan(root.<String> get(filter.getProperty()), (String) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lessThan(root.get(filter.getProperty()), (String) filter.getValue()));
 				else
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lt(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lt(root.get(filter.getProperty()), (Number) filter.getValue()));
 			} else if (filter.getOperator() == Filter.Operator.ge && filter.getValue() != null) {
 //				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.ge(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
 				//mark
 				if (aa.equalsIgnoreCase("string"))
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.greaterThanOrEqualTo(root.<String> get(filter.getProperty()), (String) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.greaterThanOrEqualTo(root.get(filter.getProperty()), (String) filter.getValue()));
 				else
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.ge(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.ge(root.get(filter.getProperty()), (Number) filter.getValue()));
 			} else if (filter.getOperator() == Filter.Operator.le && filter.getValue() != null) {
 //				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
 				//mark
 				if (aa.equalsIgnoreCase("string"))
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lessThanOrEqualTo(root.<String> get(filter.getProperty()), (String) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lessThanOrEqualTo(root.get(filter.getProperty()), (String) filter.getValue()));
 				else
-					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.<Number> get(filter.getProperty()), (Number) filter.getValue()));
+					restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.get(filter.getProperty()), (Number) filter.getValue()));
 			} else if (filter.getOperator() == Filter.Operator.like && filter.getValue() != null && filter.getValue() instanceof String) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String> get(filter.getProperty()), "%%"+filter.getValue()+"%%"));
+				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.get(filter.getProperty()), "%%"+filter.getValue()+"%%"));
 			} else if (filter.getOperator() == Filter.Operator.in && filter.getValue() != null) {
 				restrictions = criteriaBuilder.and(restrictions, root.get(filter.getProperty()).in(filter.getValue()));
 			} else if (filter.getOperator() == Filter.Operator.isNull) {
@@ -469,7 +469,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		Predicate restrictions = criteriaQuery.getRestriction() != null ? criteriaQuery.getRestriction() : criteriaBuilder.conjunction();
 		if (StringUtils.isNotEmpty(pageable.getSearchProperty()) && StringUtils.isNotEmpty(pageable.getSearchValue())) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String> get(pageable.getSearchProperty()), "%" + pageable.getSearchValue() + "%"));
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.get(pageable.getSearchProperty()), "%" + pageable.getSearchValue() + "%"));
 		}
 		if (pageable.getFilters() != null) {
 			List<Filter> lstFilters = pageable.getFilters();
