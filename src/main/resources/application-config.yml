@@ -1,0 +1,10 @@
+# GoodsCtrl
+GoodCtrl:
+  text: 商品管理
+  url: goods
+  menuList:
+    - text: getGoods
+      url: getGoods
+    - text: edit
+      url: edit
+

@@ -17,13 +17,15 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/goods")
+//@RequestMapping("/goods")
+@RequestMapping("${GoodCtrl.url}")
 public class GoodsCtrl {
 
     @Resource(name="goodsServiceImpl")
     GoodsService goodsService;
 
-    @RequestMapping("/getGoods")
+    //@RequestMapping("/getGoods")
+    @RequestMapping("${GoodCtrl.menuList[0].url}")
     public Page<Goods> getGoodsInfo(Pageable page, Goods goods, Integer goodsTypePid, Integer yxqq, Integer yxqz,String start, String end ){
         page.setOrderProperty("createTime");
         page.setOrderDirection(Order.Direction.desc);
@@ -56,7 +58,8 @@ public class GoodsCtrl {
         return goodsService.findPage(page,goods);
     }
 
-    @RequestMapping("/edit")
+    //@RequestMapping("/edit")
+    @RequestMapping("${GoodCtrl.menuList[1].url}")
     public Json edit(Goods goods, Integer goodsTypePid){
         Json json = new Json();
         boolean hasEdit = goodsService.edit(goods,goodsTypePid);
