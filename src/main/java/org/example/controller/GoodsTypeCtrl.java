@@ -18,20 +18,20 @@ import javax.annotation.Resource;
  */
 
 @RestController
-@RequestMapping("/goodsType")
+@RequestMapping("${menu[1].url}")
 public class GoodsTypeCtrl {
 
     @Resource(name="goodsTypeServiceImpl")
     GoodsTypeService goodsTypeService;
 
-    @RequestMapping("/getGoodsType")
+    @RequestMapping("${menu[1].menuList[0].url}")
     public Page<GoodsType> getGoodsTypeInfo(Pageable page, GoodsType goodsType){
 
         return goodsTypeService.findPage(page,goodsType);
     }
 
 
-    @RequestMapping("/edit")
+    @RequestMapping("${menu[1].menuList[1].url}")
     public Json edit(GoodsType goodsType){
         Json json = new Json();
         try {
@@ -48,7 +48,7 @@ public class GoodsTypeCtrl {
         return json;
     }
 
-    @RequestMapping("/add")
+    @RequestMapping("${menu[1].menuList[2].url}")
     public Json add(GoodsType goodsType){
         Json json = new Json();
         try {
@@ -63,7 +63,7 @@ public class GoodsTypeCtrl {
         return json;
     }
 
-    @RequestMapping("/del")
+    @RequestMapping("${menu[1].menuList[3].url}")
     public Json del(Integer id){
         Json json = new Json();
         try {

@@ -1,10 +1,47 @@
 # GoodsCtrl
-GoodCtrl:
-  text: 商品管理
-  url: goods
-  menuList:
-    - text: getGoods
-      url: getGoods
-    - text: edit
-      url: edit
+menu:
+  -
+    ctrl: GoodsCtrl
+    text: 商品管理
+    url: goods      # 全局必须唯一
+    icon:
+    id:         # 对应数据库权限控制表中的id， 各功能设计者自己编写，全局必须唯一
+    menuList:
+      - text: 获取商品列表数据
+        url: getGoods   # 本菜单域内，必须唯一
+        icon:
+        method:
+        id:
+      - text: 商品编辑
+        url: edit
+        icon:
+        method:
+        id:
 
+  -
+    ctrl: GoodsTypeCtrl
+    text: 商品类别管理
+    url: goodsType
+    icon:
+    id:
+    menuList:
+      - text: 获取商品类别列表数据
+        url: getGoodsType
+        icon:
+        method:
+        id:
+      - text: 商品类别编辑
+        url: edit
+        icon:
+        method:
+        id:
+      - text: 增加商品类别
+        url: add
+        icon:
+        method:
+        id:
+      - text: 删除商品类别
+        url: del
+        icon:
+        method:
+        id:
